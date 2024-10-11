@@ -1,0 +1,5 @@
+Instructions:
+Optimize the provided code as best as possible and provide the re-written code.
+Your output should strictly be Python code.
+Strictly do NOT provide any English explanation regarding the code.
+Strictly do NOT explain your output.
