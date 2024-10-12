@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 import os
 load_dotenv()
 
+
 openai_key = os.getenv('API_KEY')
 USER_PREFIX = os.getenv('USER_PREFIX')
 
@@ -18,8 +19,7 @@ prompt = """You are tasked with optimizing the following C++ code for energy eff
                 
                 Provide a detailed step-by-step explanation of your analysis and the reasoning behind each optimization strategy. After evaluating the pros and cons of each approach, choose the most effective strategy and implement the necessary changes directly into the code. Make sure the optimized code and the original code provide the same output in the same format for any given input. This is critical to the optimization.
                 
-                Here is an example of desirable optimization:
-                Example of optimization: 
+                Here is an example of desirable response:
                 Example of cpp code to be optimized:
                 ```
                 #include <iostream>
@@ -54,7 +54,21 @@ prompt = """You are tasked with optimizing the following C++ code for energy eff
                 }
                 ```
 
-                Here is the actual code to be optimized: 
+                Example of Analysis:
+
+                Reduction of Nested Loops: The original code uses a nested loop with O(n²) complexity, which is highly inefficient for large inputs. We can significantly reduce CPU cycles by eliminating the second loop and using a more efficient approach.
+                Efficient Data Structure Selection: To eliminate nested loops, we can use a hash-based data structure like unordered_set, which provides O(1) average-time complexity for both insertions and lookups. This ensures we only traverse the list once, lowering time complexity to O(n).
+                Dynamic Programming or Memoization: Since we are only identifying duplicates without overlapping subproblems, dynamic programming or memoization is not needed here. Using a hash set avoids redundant calculations, as each element is processed exactly once.
+                Specialized Algorithms: Given that the problem is about finding duplicates, no specialized algorithm is required beyond leveraging the efficient properties of a hash set for tracking elements.
+                I/O Optimization: The I/O operations are minimal and don't present significant overhead. However, maintaining simplicity in how duplicates are printed ensures no unnecessary additional operations are introduced.
+                Code Simplicity and Readability: Using an unordered_set makes the code both efficient and readable. The logic remains easy to follow, while offering an energy-efficient solution by reducing computational and memory overhead.
+
+                After considering various strategies, we opted for using unordered_set because it effectively reduces the time complexity from O(n²) to O(n) by eliminating nested loops. The set also ensures minimal memory usage and fast lookups, making it an ideal fit for this problem.
+                While dynamic programming or memoization wasn't necessary, the simplicity and clarity of using a hash-based approach meant the code remained both energy-efficient and easy to maintain.
+                Other alternatives, like sorting-based algorithms, were discarded since they either increased complexity or were unnecessary for the problem at hand.
+                This approach provided the best balance between energy efficiency, performance, and code simplicity.
+
+                Here is the actual optimized code: 
                 ```
                 #include <iostream>
                 #include <vector>
