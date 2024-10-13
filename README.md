@@ -80,6 +80,8 @@ In 'results_file.txt', information about every optimization iteration is stored 
 ]
 ```
 
+A summary of the LLM's optimizations on selected benchmarks can be found [here](https://docs.google.com/spreadsheets/d/16SBxRT3qgIaE904srtmaVqg7Rs7w_iRlNxEvjYius0w/edit?usp=sharing).
+
 ## Code Dependencies
 Software we relied on (included in [requirements.txt](https://github.com/ArjunGupte44/E2COOL/blob/main/requirements.txt)):
 ```
