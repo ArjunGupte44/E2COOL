@@ -5,7 +5,7 @@ import os
 USER_PREFIX = os.getenv('USER_PREFIX')
 
 # Convert keys to a sorted list to access the first and last elements
-with open(f"{USER_PREFIX}/EEDC/energy/c++/benchmark_data.pkl", "rb") as file:
+with open(f"{USER_PREFIX}/energy/c++/benchmark_data.pkl", "rb") as file:
     contents = pickle.load(file)
 
 keys = list(contents.keys())
