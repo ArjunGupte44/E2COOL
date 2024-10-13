@@ -53,7 +53,6 @@ prompt = """You are tasked with optimizing the following C++ code for energy eff
                     return 0;
                 }
                 ```
-
                 Example of Analysis:
 
                 Reduction of Nested Loops: The original code uses a nested loop with O(n²) complexity, which is highly inefficient for large inputs. We can significantly reduce CPU cycles by eliminating the second loop and using a more efficient approach.
@@ -106,10 +105,10 @@ prompt = """You are tasked with optimizing the following C++ code for energy eff
 """
 
 def llm_optimize(filename):
-    source_path = f"{USER_PREFIX}/EEDC/llm/benchmarks_out/{filename.split('.')[0]}/{filename}"
-
     if filename.split('.')[1] == "compiled":
-        filename = filename.split('.')[0] + "." + filename.split('.')[2:]
+        filename = filename.split('.')[0] + "." + ('.'.join(filename.split('.')[2:]))
+
+    source_path = f"{USER_PREFIX}/llm/benchmarks_out/{filename.split('.')[0]}/{filename}"
 
     with open(source_path, "r") as file:
         code_content = file.read()
@@ -143,7 +142,7 @@ def llm_optimize(filename):
     # add code content to prompt
     optimize_prompt = prompt + f" {code_content}" + f" {evaluator_feedback}"
 
-    with open(f"{USER_PREFIX}/EEDC/llm/src/output_logs/optimize_prompt_log.txt", "w") as f:
+    with open(f"{USER_PREFIX}/llm/src/output_logs/optimize_prompt_log.txt", "w") as f:
         f.write(optimize_prompt)
 
     client = OpenAI(api_key=openai_key)
@@ -167,7 +166,7 @@ def llm_optimize(filename):
     final_code = completion.choices[0].message.parsed.final_code
     
     print(f"\nnew_llm_optimize (llm_optimize): writing optimized code to llm/benchmarks_out/{filename.split('.')[0]}/optimized_{filename}")
-    destination_path = f"{USER_PREFIX}/EEDC/llm/benchmarks_out/{filename.split('.')[0]}"
+    destination_path = f"{USER_PREFIX}/llm/benchmarks_out/{filename.split('.')[0]}"
     with open(destination_path+"/optimized_"+filename, "w") as file:
         file.write(final_code)
 
@@ -175,18 +174,28 @@ def llm_optimize(filename):
     return 0
 
 def handle_compilation_error(filename):
-    with open(f"{USER_PREFIX}/EEDC/llm/benchmarks_out/{filename.split('.')[0]}/optimized_{filename}", "r") as file:
+    with open(f"{USER_PREFIX}/llm/benchmarks_out/{filename.split('.')[0]}/optimized_{filename}", "r") as file:
         optimized_code = file.read()
 
-    with open(f"{USER_PREFIX}/EEDC/llm/src/output_logs/regression_test_log.txt", "r") as file:
+    with open(f"{USER_PREFIX}/llm/src/output_logs/regression_test_log.txt", "r") as file:
         error_message = file.read()
-                      
+    
+
         class ErrorReasoning(BaseModel):
             analysis: str
             final_code: str
         
         compilation_error_prompt = f"""You were tasked with the task outlined in the following prompt: {prompt}. You returned the following optimized code: {optimized_code}. However, the code failed to compile with the following error message: {error_message}. Analyze the error message and explicitly identify the issue in the code that caused the compilation error. Then, consider if there's a need to use a different optimization strategy to compile successfully or if there are code changes which can fix this implementation strategy. Finally, update the code accordingly and ensure it compiles successfully. Ensure that the optimized code is both efficient and error-free and return it. """   
         
+
+        #if regression test too large, usally is because of syntax error
+        # Get the size of the file in bytes
+        file_size_bytes = os.path.getsize(f"{USER_PREFIX}/llm/src/output_logs/regression_test_log.txt")
+        file_size_kb = file_size_bytes / 1024
+        if file_size_kb > 100:
+            compilation_error_prompt = f"""You were tasked with the task outlined in the following prompt: {prompt}. You returned the following optimized code: {optimized_code}. However, the code has syntax error, explicitly identify the issue in the code that caused the syntax error. Then, consider if there's a need to use a different optimization strategy to compile successfully or if there are code changes which can fix this implementation strategy. Finally, update the code accordingly and ensure it compiles successfully. Ensure that the optimized code is both efficient and error-free and return it. """   
+        
+
         print("handle_compilation_error: promting for re-optimization")
         client = OpenAI(api_key=openai_key)
         completion = client.beta.chat.completions.parse(
@@ -204,26 +213,22 @@ def handle_compilation_error(filename):
         final_code = completion.choices[0].message.parsed.final_code
 
         print(f"handle_compilation_error: writing re-optimized code to optimized_{filename}")
-        destination_path = f"{USER_PREFIX}/EEDC/llm/benchmarks_out/{filename.split('.')[0]}"
+        destination_path = f"{USER_PREFIX}/llm/benchmarks_out/{filename.split('.')[0]}"
         with open(destination_path+"/optimized_"+filename, "w") as file:
             file.write(final_code)
 
 def handle_logic_error(filename):
-    with open(f"{USER_PREFIX}/EEDC/llm/benchmarks_out/{filename.split('.')[0]}/optimized_{filename}", "r") as file:
+    with open(f"{USER_PREFIX}/llm/benchmarks_out/{filename.split('.')[0]}/optimized_{filename}", "r") as file:
         optimized_code = file.read()
 
-    with open(f"{USER_PREFIX}/EEDC/llm/src/output_logs/regression_test_log.txt", "r") as file:
+    with open(f"{USER_PREFIX}/llm/src/output_logs/regression_test_log.txt", "r") as file:
         output_differences = file.read()
     
     class ErrorReasoning(BaseModel):
         analysis: str
         final_code: str
         
-    # if not use_output_differences:
-    #     logic_error_prompt = f"""You were tasked with the task outlined in the following prompt: {prompt}. You returned the following optimized code: {optimized_code}. However, the code failed to produce the same outputs as the original source code. Analyze the source code and the optimized code and explicitly identify the potential reasons that caused the logic error. Then, consider if there's a need to use a different optimization strategy to match the outputs or if there are code changes which can fix this implementation strategy. Finally, update the code accordingly and ensure it will match the source code's outputs for any input. Ensure that the optimized code is both efficient and error-free and return it. """   
-    # else:
-    #     logic_error_prompt = f"""You were tasked with the task outlined in the following prompt: {prompt}. You returned the following optimized code: {optimized_code}. However, the code failed to produce the same outputs as the original source code. Here are the output differences : {output_differences}. Analyze the source code and the optimized code and explicitly identify the potential reasons that caused the logic error. Then, consider if there's a need to use a different optimization strategy to match the outputs or if there are code changes which can fix this implementation strategy. Finally, update the code accordingly and ensure it will match the source code's outputs for any input. Ensure that the optimized code is both efficient and error-free and return it. """
-    
+
     #just prompting it to give output difference everytime
     logic_error_prompt = f"""You were tasked with the task outlined in the following prompt: {prompt}. You returned the following optimized code: {optimized_code}. However, the code failed to produce the same outputs as the original source code. Here are the output differences : {output_differences}. Analyze the source code and the optimized code and explicitly identify the potential reasons that caused the logic error. Then, consider if there's a need to use a different optimization strategy to match the outputs or if there are code changes which can fix this implementation strategy. Finally, update the code accordingly and ensure it will match the source code's outputs for any input. Ensure that the optimized code is both efficient and error-free and return it. """
     
@@ -243,7 +248,7 @@ def handle_logic_error(filename):
     final_code = completion.choices[0].message.parsed.final_code
 
 
-    destination_path = f"{USER_PREFIX}/EEDC/llm/benchmarks_out/{filename.split('.')[0]}"
+    destination_path = f"{USER_PREFIX}/llm/benchmarks_out/{filename.split('.')[0]}"
     with open(destination_path+"/optimized_"+filename, "w") as file:
         file.write(final_code)
 

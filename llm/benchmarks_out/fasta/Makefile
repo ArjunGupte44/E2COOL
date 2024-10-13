@@ -1,19 +1,19 @@
 include ../../../.env
 
 compile:
-	/usr/bin/g++ -c -pipe -O3 -fomit-frame-pointer -march=native -mfpmath=sse -msse3 -std=c++11 fasta.gpp-5.c++ -o fasta.gpp-5.c++.o &&  /usr/bin/g++ fasta.gpp-5.c++.o -o fasta.gpp-5.gpp_run -lpthread 
+	/usr/bin/g++ -c -pipe -fomit-frame-pointer -march=native -mfpmath=sse -msse3 -std=c++11 fasta.gpp-5.c++ -o fasta.gpp-5.c++.o &&  /usr/bin/g++ fasta.gpp-5.c++.o -o fasta.gpp-5.gpp_run -lpthread 
 
 compile_optimized:
-	/usr/bin/g++ -c -pipe -O3 -fomit-frame-pointer -march=native -mfpmath=sse -msse3 -std=c++11 optimized_fasta.gpp-5.c++ -o optimized_fasta.gpp-5.c++.o &&  /usr/bin/g++ optimized_fasta.gpp-5.c++.o -o optimized_fasta.gpp-5.gpp_run -lpthread 
+	/usr/bin/g++ -c -pipe -fomit-frame-pointer -march=native -mfpmath=sse -msse3 -std=c++11 optimized_fasta.gpp-5.c++ -o optimized_fasta.gpp-5.c++.o &&  /usr/bin/g++ optimized_fasta.gpp-5.c++.o -o optimized_fasta.gpp-5.gpp_run -lpthread 
 
 measure:
 	sudo modprobe msr
-	sudo ${USER_PREFIX}/EEDC/RAPL/main "./fasta.gpp-5.gpp_run 25000000" c++ fasta
-	sudo chmod -R 777 ${USER_PREFIX}/EEDC/energy/src/c++.csv
+	sudo ${USER_PREFIX}/RAPL/main "./fasta.gpp-5.gpp_run 25000000" c++ fasta
+	sudo chmod -R 777 ${USER_PREFIX}/energy/src/c++.csv
 	
 measure_optimized:
 	sudo modprobe msr
-	sudo ${USER_PREFIX}/EEDC/RAPL/main "./optimized_fasta.gpp-5.gpp_run 25000000" C++ fasta
+	sudo ${USER_PREFIX}/RAPL/main "./optimized_fasta.gpp-5.gpp_run 25000000" C++ fasta
 
 run:
 	./fasta.gpp-5.gpp_run 25000000

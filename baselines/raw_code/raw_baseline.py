@@ -1,18 +1,22 @@
 import os
 import subprocess
+from dotenv import load_dotenv
+load_dotenv()
+USER_PREFIX = os.getenv('USER_PREFIX')
 
-benchmark_dirs = ["pidigits", "k-nucleotide", "binary-trees", "fannkuch-redux", "n-body", "regex-redux"]#os.listdir("/home/arjun/VIP_PTM/EEDC/benchmarks") #FIX THIS: for me, just move the EEDC and Energy Languages benchmark folders out of VIP_PTM
+benchmark_dirs = ["pidigits", "k-nucleotide", "binary-trees", "fannkuch-redux", "n-body", "regex-redux"]
+
 full_report = {}
 
 #Clean energy/data/C++.csv by opening and closing it
-energy_csv_file = open("/home/arjun/VIP_PTM/EEDC/energy/data/C++.csv", 'w')
+energy_csv_file = open(f"{USER_PREFIX}/energy/data/C++.csv", 'w')
 energy_csv_file.close()
 
 #Iterate through all the folders in benchmarks folder
 for benchmark in benchmark_dirs:
     #Compile the benchmark's code
     try:
-        result = subprocess.run("make compile", cwd= f"/home/arjun/VIP_PTM/EEDC/benchmarks/{benchmark}", stderr=subprocess.PIPE, check=True, shell=True)
+        result = subprocess.run("make compile", cwd= f"{USER_PREFIX}/benchmarks/{benchmark}", stderr=subprocess.PIPE, check=True, shell=True)
         print(f"Successfully compiled {benchmark}.")
     except subprocess.CalledProcessError as e:
         print(f"Error while compiling {benchmark} raw code:")
@@ -20,7 +24,7 @@ for benchmark in benchmark_dirs:
     
     #Run benchmark and measure energy (automatically runs it 5 times as 5 was specified in RAP/main.c)
     try:
-        result = subprocess.run("make measure", cwd= f"/home/arjun/VIP_PTM/EEDC/benchmarks/{benchmark}", stderr=subprocess.PIPE, check=True, shell=True)
+        result = subprocess.run("make measure", cwd= f"{USER_PREFIX}/benchmarks/{benchmark}", stderr=subprocess.PIPE, check=True, shell=True)
         print(f"Successfully measured energy data for {benchmark}.")
     except subprocess.CalledProcessError as e:
         print(f"Error while measuring energy for {benchmark}:")
@@ -29,7 +33,7 @@ for benchmark in benchmark_dirs:
     
 
 #Now process C++.csv NUM_TRIALS lines at a time and get average energy and runtime values
-energy_data_file = open(f"/home/arjun/VIP_PTM/EEDC/energy/data/C++.csv")
+energy_data_file = open(f"{USER_PREFIX}/energy/data/C++.csv")
 benchmark_data = []
 
 for line in energy_data_file:

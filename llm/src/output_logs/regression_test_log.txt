@@ -1,9 +1,9 @@
-make[1]: Entering directory '/home/leoDeng/EEDC/llm/benchmarks_out/binarytrees'
-/usr/bin/g++ -c -pipe -O3 -fomit-frame-pointer -march=native  -std=c++14 -fopenmp -I/usr/include/apr-1.0 binarytrees.gpp-9.c++ -o binarytrees.gpp-9.c++.o &&  /usr/bin/g++ binarytrees.gpp-9.c++.o -o binarytrees.gpp-9.gpp_run -fopenmp -lapr-1 
-make[1]: Leaving directory '/home/leoDeng/EEDC/llm/benchmarks_out/binarytrees'
-make[1]: Entering directory '/home/leoDeng/EEDC/llm/benchmarks_out/binarytrees'
-/usr/bin/g++ -c -pipe -O3 -fomit-frame-pointer -march=native  -std=c++14 -fopenmp -I/usr/include/apr-1.0 optimized_binarytrees.gpp-9.c++ -o optimized_binarytrees.gpp-9.c++.o &&  /usr/bin/g++ optimized_binarytrees.gpp-9.c++.o -o optimized_binarytrees.gpp-9.gpp_run -fopenmp -lapr-1
-make[1]: Leaving directory '/home/leoDeng/EEDC/llm/benchmarks_out/binarytrees'
+make[1]: Entering directory '/home/jimmy/VIP_PTM/EEDC/llm/benchmarks_out/pidigits'
+/usr/bin/g++ -c -pipe -fomit-frame-pointer -march=native  -std=c++14 -g pidigits.gpp-4.c++ -o pidigits.gpp-4.c++.o &&  /usr/bin/g++ pidigits.gpp-4.c++.o -o pidigits.gpp-4.gpp_run -lgmp -lgmpxx 
+make[1]: Leaving directory '/home/jimmy/VIP_PTM/EEDC/llm/benchmarks_out/pidigits'
+make[1]: Entering directory '/home/jimmy/VIP_PTM/EEDC/llm/benchmarks_out/pidigits'
+/usr/bin/g++ -c -pipe -fomit-frame-pointer -march=native  -std=c++14 -g optimized_pidigits.gpp-4.c++ -o optimized_pidigits.gpp-4.c++.o &&  /usr/bin/g++ optimized_pidigits.gpp-4.c++.o -o optimized_pidigits.gpp-4.gpp_run -lgmp -lgmpxx 
+make[1]: Leaving directory '/home/jimmy/VIP_PTM/EEDC/llm/benchmarks_out/pidigits'
 Outputs are the same.
 Regression test successful. Outputs are the same.
 

@@ -4,9 +4,9 @@ from dotenv import load_dotenv
 load_dotenv()
 USER_PREFIX = os.getenv('USER_PREFIX')
 
-TEST_OUTPUT_FILE = f"{USER_PREFIX}/EEDC/llm/src/output_logs/regression_test_log.txt"
-UNOPTIMIZED_OUTPUT = f"{USER_PREFIX}/EEDC/llm/src/output_logs/unoptimized_output.txt"
-OPTIMIZED_OUTPUT = f"{USER_PREFIX}/EEDC/llm/src/output_logs/optimized_output.txt"
+TEST_OUTPUT_FILE = f"{USER_PREFIX}/llm/src/output_logs/regression_test_log.txt"
+UNOPTIMIZED_OUTPUT = f"{USER_PREFIX}/llm/src/output_logs/unoptimized_output.txt"
+OPTIMIZED_OUTPUT = f"{USER_PREFIX}/llm/src/output_logs/optimized_output.txt"
 
 def compile_program(output_log, optimized):
     try: 
@@ -71,11 +71,11 @@ def compare_outputs(file1, file2, output_log):
             return False
 
 def regression_test(filename): 
-    unoptimized_file_exec = f"{USER_PREFIX}/EEDC/llm/benchmarks_out/{filename.split('.')[0]}/{filename.split('.')[0]}"
-    optimized_file_exec = f"{USER_PREFIX}/EEDC/llm/benchmarks_out/{filename.split('.')[0]}/optimized_{filename}"
+    unoptimized_file_exec = f"{USER_PREFIX}/llm/benchmarks_out/{filename.split('.')[0]}/{filename.split('.')[0]}"
+    optimized_file_exec = f"{USER_PREFIX}/llm/benchmarks_out/{filename.split('.')[0]}/optimized_{filename}"
 
     # Needed for makefiles
-    os.chdir(f"{USER_PREFIX}/EEDC/llm/benchmarks_out/{filename.split('.')[0].split('_')[-1]}")   
+    os.chdir(f"{USER_PREFIX}/llm/benchmarks_out/{filename.split('.')[0].split('_')[-1]}")   
     with open(TEST_OUTPUT_FILE, 'w+') as output_log:
         if not compile_program(output_log, False):
             # Return code when unoptimized file does not compile

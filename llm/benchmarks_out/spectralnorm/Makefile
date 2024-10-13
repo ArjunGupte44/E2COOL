@@ -1,20 +1,20 @@
 include ../../../.env
 
 compile:
-	/usr/bin/g++ -c -pipe -O3 -fomit-frame-pointer -march=native -mfpmath=sse -msse2 -fopenmp -mfpmath=sse -msse2 spectralnorm.gpp-6.c++ -o spectralnorm.gpp-6.c++.o &&  /usr/bin/g++ spectralnorm.gpp-6.c++.o -o spectralnorm.gpp-6.gpp_run -fopenmp
+	/usr/bin/g++ -c -pipe -fomit-frame-pointer -march=native -mfpmath=sse -msse2 -fopenmp -mfpmath=sse -msse2 spectralnorm.gpp-6.c++ -o spectralnorm.gpp-6.c++.o &&  /usr/bin/g++ spectralnorm.gpp-6.c++.o -o spectralnorm.gpp-6.gpp_run -fopenmp
 
 compile_optimized:
-	/usr/bin/g++ -c -pipe -O3 -fomit-frame-pointer -march=native -mfpmath=sse -msse2 -fopenmp -mfpmath=sse -msse2 optimized_spectralnorm.gpp-6.c++ -o optimized_spectralnorm.gpp-6.c++.o &&  /usr/bin/g++ optimized_spectralnorm.gpp-6.c++.o -o optimized_spectralnorm.gpp-6.gpp_run -fopenmp
+	/usr/bin/g++ -c -pipe -fomit-frame-pointer -march=native -mfpmath=sse -msse2 -fopenmp -mfpmath=sse -msse2 optimized_spectralnorm.gpp-6.c++ -o optimized_spectralnorm.gpp-6.c++.o &&  /usr/bin/g++ optimized_spectralnorm.gpp-6.c++.o -o optimized_spectralnorm.gpp-6.gpp_run -fopenmp
 
 measure:
 	sudo modprobe msr
-	sudo ${USER_PREFIX}/EEDC/RAPL/main "./spectralnorm.gpp-6.gpp_run 5500" c++ spectral-norm
-	sudo chmod -R 777 ${USER_PREFIX}/EEDC/energy/src/c++.csv
+	sudo ${USER_PREFIX}/RAPL/main "./spectralnorm.gpp-6.gpp_run 5500" c++ spectral-norm
+	sudo chmod -R 777 ${USER_PREFIX}/energy/src/c++.csv
 
 measure_optimized:
 	sudo modprobe msr
-	sudo ${USER_PREFIX}/EEDC/RAPL/main "./optimized_spectralnorm.gpp-6.gpp_run 5500" c++ spectral-norm
-	sudo chmod -R 777 ${USER_PREFIX}/EEDC/energy/src/c++.csv
+	sudo ${USER_PREFIX}/RAPL/main "./optimized_spectralnorm.gpp-6.gpp_run 5500" c++ spectral-norm
+	sudo chmod -R 777 ${USER_PREFIX}/energy/src/c++.csv
 
 run:
 	./spectralnorm.gpp-6.gpp_run 5500
