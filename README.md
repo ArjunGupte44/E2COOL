@@ -1,6 +1,6 @@
-# Code Release for 2025 ICSE-NIER Submission: E2COOL - Towards Energy Efficient Code Optimizations with Large Language Models
+# Code Release for 2025 ICSE-NIER Submission: Large Language Models for Energy-Efficient Code: Emerging Results and Future Directions
 ## About
-This repository contains all the artifacts of the project “E2COOL: Towards Energy Efficient Code Optimizations with Large Language Models.” It includes scripts, implementation details, and instructions necessary to reproduce the results and experiments discussed in our submission.
+This repository contains all the artifacts of the project “Large Language Models for Energy-Efficient Code: Emerging Results and Future Directions.” It includes scripts, implementation details, and instructions necessary to reproduce the results and experiments discussed in our submission.
 
 Our artifact includes the following
 Item | Corresponding content in the paper | Relevant Directory | Relevant Scripts
@@ -12,10 +12,29 @@ Power Consumption Measurement | Section III.C | /RAPL | energy/src/measure_energ
 Comparison of Results with GCC –O3 | Section IV.D | /test_results | 
 
 ## Table of Contents
+- [Environment Requirement](#environment-requirement)
 - [Reproduce Results](#reproduce-results)
 - [Running the pipeline](#running-the-pipeline)
 - [Analysis and evaluation](#analysis-and-evaluation)
 - [Code Dependencies](#code-dependencies)
+
+## Environment Requirement
+This artifact requires a machine with the following capabilities to support RAPL (Running Average Power Limit) and read MSR (Model-Specific Registers):
+
+1. **Hardware**
+- Intel Processor: Machine with Intel processors supporting RAPL (Sandy Bridge or newer).
+- MSR Support: Machine must allow access to MSRs.
+
+2. **Operating System**
+- Linux-based OS (e.g., Ubuntu 16.04+).
+- Linux Kernel Version 3.13+ required for RAPL support.
+- Root Access: MSRs can only be accessed with root/superuser privileges.
+
+3. **Software**
+- msr-tools: Install for reading MSRs:
+  ```bash
+  sudo apt-get install msr-tools
+
 ## Reproduce Results
 To set up the pipeline for energy-efficient code optimization, follow these steps:
 1. **Clone the repository:**
@@ -29,11 +48,11 @@ To set up the pipeline for energy-efficient code optimization, follow these step
     This should include:
     ```bash
     API_KEY=your_openai_api_key_here
-    USER_PREFIX=/path/to/EEDC
+    USER_PREFIX=/path/to/E2COOL
 4. **Update RAPL/main.c write path**
     Change line 31 to match your absolute path
     ```bash
-    strcpy(path, “ABSOLUTE_PATH/EEDC/energy/src/");
+    strcpy(path, “ABSOLUTE_PATH/E2COOL/energy/src/");
     ```
     Then run make in RAPL directory
     ```bash
@@ -62,7 +81,7 @@ In 'results_file.txt', information about every optimization iteration is stored 
 ```
 
 ## Code Dependencies
-Software we relied on (included in [requirements.txt](https://github.com/ArjunGupte44/EEDC/blob/fall2024/requirements.txt)):
+Software we relied on (included in [requirements.txt](https://github.com/ArjunGupte44/E2COOL/blob/main/requirements.txt)):
 ```
 openai==1.50.1
 pydantic==2.9.2
