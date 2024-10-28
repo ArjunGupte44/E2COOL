@@ -1,5 +1,4 @@
 
-
 #include <stdio.h>
 #include <time.h>
 #include <math.h>
@@ -29,7 +28,7 @@ int main (int argc, char **argv)
   //Language name
   strcpy(language,argv[2]);
   //Path to language .csv file
-  // strcpy(path, "ABSOLUTE_PATH/EEDC/energy/src/");
+  // strcpy(path, "ABSOLUTE_PATH/E2COOL/energy/src/");
   strcat(language,".csv");
   strcat(path,language);
   //Test name
