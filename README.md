@@ -58,7 +58,7 @@ To set up the pipeline for energy-efficient code optimization, follow these step
     ```bash
     make
 ## Running the pipeline
-5. **Run the main script**
+5. **Run the main script in the home directory (/E2COOL)**
     ```bash
     make run (benchmark name)
     ```
