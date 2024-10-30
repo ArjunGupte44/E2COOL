@@ -129,7 +129,7 @@ def master_script(filename):
             shutil.copyfile(f"{USER_PREFIX}/llm/benchmarks_out/{filename.split('.')[0]}/optimized_{filename}", f"{USER_PREFIX}/llm/benchmarks_out/{filename.split('.')[0]}/{filename.split('.')[0]}.compiled.{'.'.join(filename.split('.')[1:])}")
             
             # Hard code to run 5 times
-            if success == 2:
+            if success == 5:
                 # print_green("Optimized 5 times successfully, exiting script")
                 logger.info("Optimized 5 times successfully, exiting script")
                 break
