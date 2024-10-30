@@ -10,7 +10,6 @@ You are tasked with optimizing the following C++ code for energy efficiency, spe
                 Provide a detailed step-by-step explanation of your analysis and the reasoning behind each optimization strategy. After evaluating the pros and cons of each approach, choose the most effective strategy and implement the necessary changes directly into the code. Make sure the optimized code and the original code provide the same output in the same format for any given input. This is critical to the optimization.
                 
                 Here is an example of desirable response:
-
                 Example of cpp code to be optimized:
                 ```
                 #include <iostream>
@@ -93,71 +92,192 @@ You are tasked with optimizing the following C++ code for energy efficiency, spe
                     return 0;
                 }
                 ```
- /* The Computer Language Benchmarks Game
- * http://benchmarksgame.alioth.debian.org/
- *
- * contributed by Alessandro Power
- */
-
-#include <gmpxx.h>
+ #include <algorithm>
+#include <cstdio>
+#include <cmath>
 #include <cstdlib>
-#include <iostream>
+#include <omp.h>
+#include <vector>
+#include <immintrin.h>
+#include <array>
 
-class LFT {
-public:
-    mpz_class q;
-    mpz_class r;
-    mpz_class t;
-    unsigned k;
+constexpr double PI(3.141592653589793);
+constexpr double SOLAR_MASS(4 * PI * PI);
+constexpr double DAYS_PER_YEAR(365.24);
 
-public:
-    LFT() : q(1), r(0), t(1), k(0){};
-
-    void next() {
-        ++k;
-        r = (2 * k + 1) * (2 * q + r);
-        t = (2 * k + 1) * t;
-        q = q * k;
-    }
-
-    unsigned extract(unsigned x) const {
-        static mpz_class tmp0, tmp1;
-        tmp0 = q * x + r;
-        tmp1 = tmp0 / t;
-        return tmp1.get_ui();
-    }
-
-    void produce(unsigned n) {
-        q = 10 * q;
-        r = 10 * (r - n * t);
-    }
+struct Body {
+    double x[3], v[3], mass;
+    constexpr Body(double x0, double x1, double x2, double v0, double v1, double v2, double Mass)
+        : x{x0, x1, x2}, v{v0, v1, v2}, mass(Mass) {}
 };
 
-int main(int, char** argv) {
-    std::ios_base::sync_with_stdio(false);
+class NBodySystem {
+    std::vector<Body> bodies;
 
-    const std::size_t TOTAL_DIGITS = std::atol(argv[1]);
+    void offset_momentum() {
+        double p[3] = {0, 0, 0};
+        for (auto &body : bodies) {
+            for (int i = 0; i < 3; ++i)
+                p[i] += body.v[i] * body.mass;
+        }
+        for (int i = 0; i < 3; ++i)
+            bodies[0].v[i] -= p[i] / SOLAR_MASS;
+    }
 
-    LFT lft;
-    std::size_t n_digits = 0;
-    while (n_digits < TOTAL_DIGITS) {
-        std::size_t i = 0;
-        while (i < 10 and n_digits < TOTAL_DIGITS) {
-            lft.next();
-            if (lft.q > lft.r) continue;
+public:
+    NBodySystem() : bodies({
+        Body(0, 0, 0, 0, 0, 0, SOLAR_MASS),
+        Body(4.84143144246472090e+00, -1.16032004402742839e+00, -1.03622044471123109e-01,
+             1.66007664274403694e-03 * DAYS_PER_YEAR, 7.69901118419740425e-03 * DAYS_PER_YEAR,
+             -6.90460016972063023e-05 * DAYS_PER_YEAR, 9.54791938424326609e-04 * SOLAR_MASS),
+        Body(8.34336671824457987e+00, 4.12479856412430479e+00, -4.03523417114321381e-01,
+             -2.76742510726862411e-03 * DAYS_PER_YEAR, 4.99852801234917238e-03 * DAYS_PER_YEAR,
+             2.30417297573763929e-05 * DAYS_PER_YEAR, 2.85885980666130812e-04 * SOLAR_MASS),
+        Body(1.28943695621391310e+01, -1.51111514016986312e+01, -2.23307578892655734e-01,
+             2.96460137564761618e-03 * DAYS_PER_YEAR, 2.37847173959480950e-03 * DAYS_PER_YEAR,
+             -2.96589568540237556e-05 * DAYS_PER_YEAR, 4.36624404335156298e-05 * SOLAR_MASS),
+        Body(1.53796971148509165e+01, -2.59193146099879641e+01, 1.79258772950371181e-01,
+             2.68067772490389322e-03 * DAYS_PER_YEAR, 1.62824170038242295e-03 * DAYS_PER_YEAR,
+             -9.51592254519715870e-05 * DAYS_PER_YEAR, 5.15138902046611451e-05 * SOLAR_MASS)
+        }) {
+        offset_momentum();
+    }
 
-            auto digit = lft.extract(3);
-            if (digit == lft.extract(4)) {
-                std::cout << digit;
-                lft.produce(digit);
-                ++i;
-                ++n_digits;
+    void advance(double dt) {
+        size_t n = bodies.size();
+        #pragma omp parallel for schedule(dynamic)
+        for (size_t i = 0; i < n; ++i) {
+            double r[3];
+            for (size_t j = i + 1; j < n; ++j) {
+                for (int m = 0; m < 3; ++m)
+                    r[m] = bodies[i].x[m] - bodies[j].x[m];
+
+                double dsquared = r[0] * r[0] + r[1] * r[1] + r[2] * r[2];
+                double distance = std::sqrt(dsquared);
+                double mag = dt / (dsquared * distance);
+                
+                double force[3];
+                for (int m = 0; m < 3; ++m) {
+                    force[m] = r[m] * mag;
+                    #pragma omp atomic
+                    bodies[i].v[m] -= force[m] * bodies[j].mass;
+                    #pragma omp atomic
+                    bodies[j].v[m] += force[m] * bodies[i].mass;
+                }
             }
         }
 
-        // Pad digits with extra spaces if TOTAL_DIGITS was not a
-        // multiple of 10.
-        for (; i < 10; ++i) std::cout << ' ';
-        std::cout << "\t:" << n_digits << '\n';
+        #pragma omp parallel for
+        for (size_t i = 0; i < n; ++i) {
+            for (int m = 0; m < 3; ++m)
+                bodies[i].x[m] += dt * bodies[i].v[m];
+        }
     }
-} 
+
+    double energy() const {
+        double e = 0.0;
+        for (auto bi = bodies.begin(); bi != bodies.end(); ++bi) {
+            e += bi->mass * (bi->v[0] * bi->v[0] + bi->v[1] * bi->v[1] + bi->v[2] * bi->v[2]) / 2.0;
+            for (auto bj = bi + 1; bj != bodies.end(); ++bj) {
+                double distance = 0;
+                for (int k = 0; k < 3; ++k) {
+                    double dx = bi->x[k] - bj->x[k];
+                    distance += dx * dx;
+                }
+                e -= (bi->mass * bj->mass) / std::sqrt(distance);
+            }
+        }
+        return e;
+    }
+};
+
+int main(int argc, char **argv) {
+    int n = atoi(argv[1]);
+    NBodySystem system;
+    std::printf("%.9f\n", system.energy());
+    for (int i = 0; i < n; ++i)
+        system.advance(0.01);
+    std::printf("%.9f\n", system.energy());
+    return 0;
+} Here's some suggestion on how you should optimize the code from the evaluator, keep these in mind when optimizing code
+To optimize the given N-Body simulation code, let's perform a detailed analysis of the current and optimized code snippets in terms of time complexity, space complexity, readability, performance, and energy efficiency. Our goal is to reduce energy consumption and improve runtime performance while maintaining code clarity.
+
+### 1. Current Code Behavior
+- **Functionality**: The code simulates an N-Body system's behavior over time, computing gravitational interactions and updating positions and velocities.
+- **Design**: It uses a class to represent the system, storing bodies in an array or vector. The `advance` method calculates forces, updating velocities and positions.
+- **Algorithm Choice**: The code calculates pairwise gravitational forces, a common O(n^2) time complexity approach for N-Body simulations. It uses SIMD (Single Instruction, Multiple Data) instructions from AVX (Advanced Vector Extensions) for more efficient mathematical calculations.
+
+### 2. Inefficiencies and Bottlenecks
+- **Time Complexity**: The nested loops to calculate pairwise interactions have an O(n^2) complexity, limiting scalability with a growing number of bodies.
+- **Space Complexity**: The code maintains arrays for intermediate calculations, which can be optimized with careful management.
+- **Readability**: The use of raw loops and direct SIMD intrinsics can make the code harder to read and maintain for those unfamiliar with SIMD.
+- **Specific Energy/Resource Consumption**: Frequent memory allocations and high computational load in pairwise interactions and square root calculations are potential energy sinks.
+
+### 3. Energy-Efficiency Specific Analysis
+- **Energy-Heavy Operations**: Calculation of distances and forces involves numerous arithmetic operations and memory accesses, leading to energy consumption. Atomic operations can introduce thread contention and also impact energy usage, particularly on multi-core systems.
+
+### 4. Comparison to Best Optimized Code
+- **Efficient Data Structures/Algorithms**: Both versions operate on similar structures, though optimizations like loop unrolling or pre-calculated values can reduce repeated computations.
+- **Reduced Energy-Intensive Operations**: The optimized code appears to employ typical compiler optimizations, possibly furthering pre-computation or caching of results, leading to better energy usage.
+- **Hardware Efficiency**: OpenMP parallelization is used but must be balanced to prevent excessive thread management overheads.
+
+### 5. Improvement Suggestions
+- **Parallelization Strategy**:
+  - Optimize OpenMP usage further by analyzing workload distributions to minimize context switching.
+  - Use a more adaptive scheduling strategy with OpenMP, like `static` or `guided` based on the problem size.
+
+- **Loop Unrolling & Vectorization**:
+  - The current implementation can benefit from compiler-level loop unrolling and even more aggressive vectorization on newer processors if not already done.
+  - Ensure data alignment for efficient SIMD utilization.
+
+- **Algorithmic Optimizations**:
+  - Consider a hierarchical N-Body method like the Barnes-Hut algorithm for larger systems, reducing time complexity from O(n^2) to O(n log n).
+
+- **Code Refactoring**:
+  - Simplify the calculation of distances by storing fewer intermediate results to improve readability and potentially reduce cache misses.
+  
+- **Concrete Code Example**:
+  Here's a refactored segment focusing on maintaining SIMD efficiency:
+
+  ```cpp
+  void advance(double dt) {
+      size_t n = bodies.size();
+      double r[3], dsquared, distance, mag[3];
+
+      #pragma omp parallel for schedule(dynamic) private(r, dsquared, distance, mag)
+      for (size_t i = 0; i < n; ++i) {
+          for (size_t j = i + 1; j < n; ++j) {
+              // Vector operations can be made more explicit here
+              for (int m = 0; m < 3; ++m)
+                  r[m] = bodies[i].x[m] - bodies[j].x[m];
+
+              dsquared = r[0] * r[0] + r[1] * r[1] + r[2] * r[2];
+              distance = std::sqrt(dsquared);
+              double inv_dist = (dt / (dsquared * distance));
+              
+              for (int m = 0; m < 3; ++m) {
+                  mag[m] = r[m] * inv_dist;
+                  #pragma omp atomic
+                  bodies[i].v[m] -= mag[m] * bodies[j].mass;
+                  #pragma omp atomic
+                  bodies[j].v[m] += mag[m] * bodies[i].mass;
+              }
+          }
+      }
+
+      // Update positions in a separate loop to encourage further vectorization
+      #pragma omp parallel for
+      for (size_t i = 0; i < n; ++i) {
+          for (int m = 0; m < 3; ++m) {
+              bodies[i].x[m] += dt * bodies[i].v[m];
+          }
+      }
+  }
+  ```
+
+### 6. Energy-Specific Metrics and Best Practices
+- **Reduce Memory Access**: Align and batch memory accesses to improve cache locality.
+- **Optimize CPU-bound tasks**: Balance CPU loads among threads efficiently to leverage core utilization fully.
+- **Minimize Synchronization Costs**: Use mechanisms like OpenMP reduction where possible, to minimize atomic operations.
+
+With these recommendations, you can strive to decrease the energy footprint without sacrificing performance or readability significantly. The practical impact will depend on specific system architecture, so testing on target hardware is advised to validate energy gains.

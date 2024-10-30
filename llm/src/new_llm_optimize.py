@@ -104,12 +104,20 @@ prompt = """You are tasked with optimizing the following C++ code for energy eff
                 ```
 """
 
-def llm_optimize(filename):
-    if filename.split('.')[1] == "compiled":
-        filename = filename.split('.')[0] + "." + ('.'.join(filename.split('.')[2:]))
+def llm_optimize(filename, optim_iter):
 
+    # get original code
     source_path = f"{USER_PREFIX}/llm/benchmarks_out/{filename.split('.')[0]}/{filename}"
 
+    # get optimized file if is not first iteration
+    if optim_iter != 0:
+        source_path = f"/home/jimmy/VIP_PTM/E2COOL/llm/benchmarks_out/{filename.split('.')[0]}/optimized_{filename}"
+
+    # get lastly compiled code
+    if filename.split('.')[1] == "compiled":
+        source_path = f"/home/jimmy/VIP_PTM/E2COOL/llm/benchmarks_out/{filename.split('.')[0]}/{filename}"
+        filename = filename.split('.')[0] + "." + ('.'.join(filename.split('.')[2:]))
+    
     with open(source_path, "r") as file:
         code_content = file.read()
 
@@ -137,7 +145,7 @@ def llm_optimize(filename):
         # print("File content:", content)
     else:
         evaluator_feedback = ""
-        print("First optimization, no evaluator feedback yet")
+        print("llm_optimize: First optimization, no evaluator feedback yet")
 
     # add code content to prompt
     optimize_prompt = prompt + f" {code_content}" + f" {evaluator_feedback}"
@@ -147,6 +155,7 @@ def llm_optimize(filename):
 
     client = OpenAI(api_key=openai_key)
 
+    print(f"llm_optimize: Generator LLM Optimizing ....")
     completion = client.beta.chat.completions.parse(
         model="gpt-4o-2024-08-06",
         messages=[
@@ -165,7 +174,7 @@ def llm_optimize(filename):
     
     final_code = completion.choices[0].message.parsed.final_code
     
-    print(f"\nnew_llm_optimize (llm_optimize): writing optimized code to llm/benchmarks_out/{filename.split('.')[0]}/optimized_{filename}")
+    print(f"llm_optimize: : writing optimized code to llm/benchmarks_out/{filename.split('.')[0]}/optimized_{filename}")
     destination_path = f"{USER_PREFIX}/llm/benchmarks_out/{filename.split('.')[0]}"
     with open(destination_path+"/optimized_"+filename, "w") as file:
         file.write(final_code)
@@ -190,9 +199,11 @@ def handle_compilation_error(filename):
 
         #if regression test too large, usally is because of syntax error
         # Get the size of the file in bytes
+        
         file_size_bytes = os.path.getsize(f"{USER_PREFIX}/llm/src/output_logs/regression_test_log.txt")
         file_size_kb = file_size_bytes / 1024
         if file_size_kb > 100:
+            print("Syntax Error")
             compilation_error_prompt = f"""You were tasked with the task outlined in the following prompt: {prompt}. You returned the following optimized code: {optimized_code}. However, the code has syntax error, explicitly identify the issue in the code that caused the syntax error. Then, consider if there's a need to use a different optimization strategy to compile successfully or if there are code changes which can fix this implementation strategy. Finally, update the code accordingly and ensure it compiles successfully. Ensure that the optimized code is both efficient and error-free and return it. """   
         
 
