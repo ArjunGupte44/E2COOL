@@ -111,11 +111,11 @@ def llm_optimize(filename, optim_iter):
 
     # get optimized file if is not first iteration
     if optim_iter != 0:
-        source_path = f"/home/jimmy/VIP_PTM/E2COOL/llm/benchmarks_out/{filename.split('.')[0]}/optimized_{filename}"
+        source_path = f"{USER_PREFIX}/E2COOL/llm/benchmarks_out/{filename.split('.')[0]}/optimized_{filename}"
 
     # get lastly compiled code
     if filename.split('.')[1] == "compiled":
-        source_path = f"/home/jimmy/VIP_PTM/E2COOL/llm/benchmarks_out/{filename.split('.')[0]}/{filename}"
+        source_path = f"{USER_PREFIX}/E2COOL/llm/benchmarks_out/{filename.split('.')[0]}/{filename}"
         filename = filename.split('.')[0] + "." + ('.'.join(filename.split('.')[2:]))
     
     with open(source_path, "r") as file:
