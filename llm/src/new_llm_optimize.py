@@ -8,17 +8,34 @@ load_dotenv()
 openai_key = os.getenv('API_KEY')
 USER_PREFIX = os.getenv('USER_PREFIX')
 
-prompt = """You are tasked with optimizing the following C++ code for energy efficiency, specifically focusing on reducing CPU cycles, minimizing memory access, and optimizing I/O operations. Analyze the code thoroughly and suggest multiple optimization strategies, considering the following aspects:
+prompt = """You are tasked with optimizing the following C++ code to improve its energy efficiency. This involves reducing CPU cycles, minimizing memory access, and optimizing I/O operations. Please follow these steps and guidelines:
 
-                Reduction of nested loops: Identify opportunities to simplify or eliminate nested loops to reduce computational overhead.
-                Efficient data structure selection: Propose data structures that minimize memory access and improve performance.
-                Dynamic programming or memoization: Look for opportunities to avoid redundant calculations and reduce CPU cycles.
-                Specialized algorithms: Explore if more efficient algorithms can be applied to lower resource usage.
-                I/O optimization: Suggest ways to optimize input/output operations, reducing their impact on performance.
-                Code simplicity and readability: Ensure that the optimized code remains understandable while achieving energy efficiency.
-                
-                Provide a detailed step-by-step explanation of your analysis and the reasoning behind each optimization strategy. After evaluating the pros and cons of each approach, choose the most effective strategy and implement the necessary changes directly into the code. Make sure the optimized code and the original code provide the same output in the same format for any given input. This is critical to the optimization.
-                
+ Task Instructions:
+
+                - Analyze the code: Examine the provided C++ code in detail.
+                - Identify optimization opportunities, determine where you can:
+                    - Reduce or eliminate nested loops to lower computational overhead.
+                    - Select more efficient data structures to minimize memory access and improve performance.
+                    - Apply dynamic programming or memoization to avoid redundant calculations and reduce CPU usage where applicable.
+                    - Implement specialized algorithms if they can significantly improve performance and reduce energy consumption.
+                    - Optimize I/O operations to reduce their impact on overall performance.
+                - Suggest optimization strategies: Propose multiple methods to improve energy efficiency. For each method:
+                    - Provide a detailed explanation of how the optimization reduces energy usage.
+                    - Discuss the trade-offs in terms of complexity, maintainability, and performance gains.
+                - Choose the most effective optimization: After evaluating each proposed strategy, select the approach that yields the best balance of energy efficiency, performance, readability, and maintainability.
+                - Implement the chosen optimization: Rewrite the code with the chosen optimization strategies, ensuring:
+                    - The optimized code produces the same output as the original code for all valid inputs.
+                    - Code remains clear and understandable.
+                - Provide a detailed explanation: For each change you make, explain:
+                    - Why this change optimizes energy efficiency.
+                    - The improvement in performance and energy usage expected.
+                    - How this change preserves the correctness and format of the output.
+                - Output Requirements:
+                    - Begin with a step-by-step analysis of the original code and identify inefficiencies.
+                    - Outline each proposed optimization strategy in detail, including the reasoning behind it and its potential impact on energy usage.
+                    - Implement the best optimization strategies directly into the code.
+                    - Ensure the final code is energy-efficient, correct in terms of functionality, and maintains similar output formatting.
+                                
                 Here is an example of desirable response:
                 Example of cpp code to be optimized:
                 ```
@@ -54,19 +71,14 @@ prompt = """You are tasked with optimizing the following C++ code for energy eff
                 }
                 ```
                 Example of Analysis:
-
-                Reduction of Nested Loops: The original code uses a nested loop with O(n²) complexity, which is highly inefficient for large inputs. We can significantly reduce CPU cycles by eliminating the second loop and using a more efficient approach.
-                Efficient Data Structure Selection: To eliminate nested loops, we can use a hash-based data structure like unordered_set, which provides O(1) average-time complexity for both insertions and lookups. This ensures we only traverse the list once, lowering time complexity to O(n).
-                Dynamic Programming or Memoization: Since we are only identifying duplicates without overlapping subproblems, dynamic programming or memoization is not needed here. Using a hash set avoids redundant calculations, as each element is processed exactly once.
-                Specialized Algorithms: Given that the problem is about finding duplicates, no specialized algorithm is required beyond leveraging the efficient properties of a hash set for tracking elements.
-                I/O Optimization: The I/O operations are minimal and don't present significant overhead. However, maintaining simplicity in how duplicates are printed ensures no unnecessary additional operations are introduced.
-                Code Simplicity and Readability: Using an unordered_set makes the code both efficient and readable. The logic remains easy to follow, while offering an energy-efficient solution by reducing computational and memory overhead.
-
-                After considering various strategies, we opted for using unordered_set because it effectively reduces the time complexity from O(n²) to O(n) by eliminating nested loops. The set also ensures minimal memory usage and fast lookups, making it an ideal fit for this problem.
-                While dynamic programming or memoization wasn't necessary, the simplicity and clarity of using a hash-based approach meant the code remained both energy-efficient and easy to maintain.
-                Other alternatives, like sorting-based algorithms, were discarded since they either increased complexity or were unnecessary for the problem at hand.
-                This approach provided the best balance between energy efficiency, performance, and code simplicity.
-
+                Analysis and reasoning example:
+                    - Reduction of Nested Loops: Uses an O(n²) approach with nested loops.
+                    - Efficient Data Structure Selection: Using an unordered_set to track seen user IDs reduces complexity to O(n).
+                    - Dynamic Programming or Memoization: Not required here as each ID is processed once with an efficient data structure.
+                    - Specialized Algorithms: Using hashing-based data structures effectively reduces redundant checks.
+                    - I/O Optimization: Minimal I/O operations are used. Keep output operations efficient and straightforward.
+                    - Code Simplicity and Readability: The optimized approach using unordered_set is both efficient and easy to understand.
+                
                 Here is the actual optimized code: 
                 ```
                 #include <iostream>
@@ -105,17 +117,19 @@ prompt = """You are tasked with optimizing the following C++ code for energy eff
 """
 
 def llm_optimize(filename, optim_iter):
-
+    print(f"***********************[ Optimizing {filename} ]***********************")
     # get original code
     source_path = f"{USER_PREFIX}/llm/benchmarks_out/{filename.split('.')[0]}/{filename}"
 
     # get optimized file if is not first iteration
     if optim_iter != 0:
-        source_path = f"{USER_PREFIX}/E2COOL/llm/benchmarks_out/{filename.split('.')[0]}/optimized_{filename}"
+        print(f"Getting optimized code from optimized_{filename}")
+        source_path = f"{USER_PREFIX}/llm/benchmarks_out/{filename.split('.')[0]}/optimized_{filename}"
 
     # get lastly compiled code
     if filename.split('.')[1] == "compiled":
-        source_path = f"{USER_PREFIX}/E2COOL/llm/benchmarks_out/{filename.split('.')[0]}/{filename}"
+        print(f"Getting lastly compiled code from {filename}")
+        source_path = f"{USER_PREFIX}/llm/benchmarks_out/{filename.split('.')[0]}/{filename}"
         filename = filename.split('.')[0] + "." + ('.'.join(filename.split('.')[2:]))
     
     with open(source_path, "r") as file:
@@ -142,7 +156,7 @@ def llm_optimize(filename, optim_iter):
             evaluator_feedback = file.read()
             evaluator_feedback = "Here's some suggestion on how you should optimize the code from the evaluator, keep these in mind when optimizing code\n" + evaluator_feedback
             print("llm_optimize: got evaluator feedback")
-        # print("File content:", content)
+
     else:
         evaluator_feedback = ""
         print("llm_optimize: First optimization, no evaluator feedback yet")
@@ -167,16 +181,23 @@ def llm_optimize(filename, optim_iter):
         ],
         response_format=OptimizationReasoning
     )
+    print(f"llm_optimize: Generator LLM Completed Optimization")
 
+    
     if completion.choices[0].message.parsed.final_code == "":
         print("Error in llm completion")
         return
     
     final_code = completion.choices[0].message.parsed.final_code
     
+    #store generator final code
+    generator_respond = f"{USER_PREFIX}/llm/src/output_logs/generator_respond.txt"
+    with open(generator_respond, "w") as file:
+        file.write(final_code)
+    
     print(f"llm_optimize: : writing optimized code to llm/benchmarks_out/{filename.split('.')[0]}/optimized_{filename}")
-    destination_path = f"{USER_PREFIX}/llm/benchmarks_out/{filename.split('.')[0]}"
-    with open(destination_path+"/optimized_"+filename, "w") as file:
+    destination_path = f"{USER_PREFIX}/llm/benchmarks_out/{filename.split('.')[0]}/optimized_{filename}"
+    with open(destination_path, "w") as file:
         file.write(final_code)
 
     # Success code
@@ -197,9 +218,8 @@ def handle_compilation_error(filename):
         compilation_error_prompt = f"""You were tasked with the task outlined in the following prompt: {prompt}. You returned the following optimized code: {optimized_code}. However, the code failed to compile with the following error message: {error_message}. Analyze the error message and explicitly identify the issue in the code that caused the compilation error. Then, consider if there's a need to use a different optimization strategy to compile successfully or if there are code changes which can fix this implementation strategy. Finally, update the code accordingly and ensure it compiles successfully. Ensure that the optimized code is both efficient and error-free and return it. """   
         
 
-        #if regression test too large, usally is because of syntax error
+        #if regression_test_log too large, usally is because of syntax error
         # Get the size of the file in bytes
-        
         file_size_bytes = os.path.getsize(f"{USER_PREFIX}/llm/src/output_logs/regression_test_log.txt")
         file_size_kb = file_size_bytes / 1024
         if file_size_kb > 100:

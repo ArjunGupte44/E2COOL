@@ -75,6 +75,7 @@ class Benchmark():
         for data in benchmark_data:
             avg_energy += data[1]
             avg_runtime += data[2]
+
         avg_energy /= len(benchmark_data)
         avg_runtime /= len(benchmark_data)
 

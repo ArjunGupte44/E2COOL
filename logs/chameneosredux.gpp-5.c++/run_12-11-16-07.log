@@ -1,0 +1,20 @@
+11/12/24 04:07:54 PM : INFO : Running benchmark: chameneosredux.gpp-5.c++
+11/12/24 04:07:54 PM : INFO : /home/jimmy/VIP_PTM/E2COOL/llm/benchmarks_out/chameneosredux/chameneosredux.compiled.gpp-5.c++
+11/12/24 04:07:54 PM : INFO : Optimizing chameneosredux.gpp-5.c++, iteration 0
+11/12/24 04:08:15 PM : INFO : HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+11/12/24 04:08:15 PM : INFO : Running regression test on optimized_chameneosredux.gpp-5.c++
+11/12/24 04:08:16 PM : ERROR : Error in optimized file, re-optimizing
+11/12/24 04:08:40 PM : INFO : HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+11/12/24 04:08:40 PM : INFO : Optimizing chameneosredux.gpp-5.c++, iteration 0
+11/12/24 04:09:05 PM : INFO : HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+11/12/24 04:09:05 PM : INFO : Running regression test on optimized_chameneosredux.gpp-5.c++
+11/12/24 04:09:06 PM : ERROR : Error in optimized file, re-optimizing
+11/12/24 04:09:21 PM : INFO : HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+11/12/24 04:09:21 PM : INFO : Optimizing chameneosredux.gpp-5.c++, iteration 0
+11/12/24 04:09:58 PM : INFO : HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+11/12/24 04:09:58 PM : INFO : Running regression test on optimized_chameneosredux.gpp-5.c++
+11/12/24 04:09:59 PM : ERROR : Error in optimized file, re-optimizing
+11/12/24 04:10:33 PM : INFO : HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+11/12/24 04:10:33 PM : INFO : Optimizing chameneosredux.gpp-5.c++, iteration 0
+11/12/24 04:12:02 PM : INFO : HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+11/12/24 04:12:02 PM : INFO : Running regression test on optimized_chameneosredux.gpp-5.c++

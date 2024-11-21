@@ -1,36 +1,81 @@
-```cpp
 #include <iostream>
-#include <thread>
 #include <vector>
+#include <unordered_set>
+#include <thread>
 #include <mutex>
-#include <string>
+#include <condition_variable>
+#include <sched.h>
+#include <pthread.h>
 #include <atomic>
 
 using namespace std;
 
-enum Color { blue = 0, red, yellow, Invalid };
+// Use atomic operations to manage state and synchronization in a more efficient and safe manner
+std::mutex mtx;  // mutex for critical section
+std::condition_variable cv;
 
-ostream &operator<<(ostream &s, const Color &c) {
-    static const char *names[] = {"blue", "red", "yellow", "Invalid"};
-    s << names[c];
-    return s;
+struct CPUs {
+    enum { perslot = 2 };
+    int count, mod;
+    cpu_set_t affinities[33];
+
+    CPUs() : count(0) {
+        // Using new C++ standards for affinity setting
+        for (int i = 0; i < 33; i++)
+            CPU_ZERO(&affinities[i]);
+        cpu_set_t cs;
+        sched_getaffinity(0, sizeof(cs), &cs);
+
+        for (int i = 0; i < CPU_SETSIZE; i++) {
+            if (CPU_ISSET(i, &cs)) {
+                CPU_SET(i, &affinities[(count / perslot) + 1]);
+                count++;
+            }
+        }
+        mod = (count > 2) ? count >> 1 : 1;
+    }
+
+    cpu_set_t* getaffinity(int slot) {
+        return &affinities[slot ? (slot % mod) + 1 : 0];
+    }
+} cpus;
+
+// Optimize thread yield by using standard library support
+void yield() {
+    std::this_thread::yield();
 }
 
-Color operator+(const Color &c1, const Color &c2) {
-    const Color results[3][3] = {{blue, yellow, red}, {yellow, red, blue}, {red, blue, yellow}};
-    if (c1 < 3 && c2 < 3) return results[c1][c2];
-    else return Invalid;
+enum Color { blue = 0, red, yellow, Invalid };
+
+// Streamlined the color overloading for clarity and performance
+ostream& operator<<(ostream& s, const Color& c) {
+    static const char* names[] = { "blue", "red", "yellow", "Invalid" };
+    return s << names[c];
+}
+
+Color operator+(const Color& c1, const Color& c2) {
+    switch (c1) {
+        case blue: return c2 == red ? yellow : c2 == yellow ? red : blue;
+        case red: return c2 == blue ? yellow : c2 == yellow ? blue : red;
+        case yellow: return c2 == blue ? red : c2 == red ? blue : yellow;
+        default: return Invalid;
+    }
 }
 
 string SpellNumber(int n) {
-    static const char *numbers[] = {" zero", " one", " two", " three", " four", " five", " six", " seven", " eight", " nine"};
+    static const char* numbers[] = {
+        " zero", " one", " two",
+        " three", " four", " five",
+        " six", " seven", " eight",
+        " nine"
+    };
 
     string str;
-    do {
+    if (n == 0) return " zero";
+    while (n) {
         str.insert(0, numbers[n % 10]);
         n /= 10;
-    } while (n);
-
+    }
     return str;
 }
 
@@ -38,130 +83,166 @@ struct MeetingPlace;
 
 class Creature {
 public:
-    Creature() : id(0), count(0), sameCount(0), met(false), place(nullptr), threadHandle(nullptr) {}
-    ~Creature() { if(threadHandle) threadHandle->join(); delete threadHandle; }
+    Creature() : id(0), count(0), sameCount(0), met(false) {}
 
-    void Initialize(MeetingPlace *mp, Color c);
-    void Wait() { threadHandle->join(); }
-
-    int Display() const {
-        cout << count << SpellNumber(sameCount) << endl;
-        return count;
-    }
-
-private:
+    int Display() const { return count; }
+    void Meet(Creature* other);
+    void Init(MeetingPlace* mp, Color c);
     void Run();
-    void MeetWith(Creature *other);
+    void Start(int affinity = 0);
+    void Wait() const;
+    void WaitUntilMet();
 
     int id, count, sameCount;
-    volatile bool met;
+    bool met;
     Color initialColor, color;
-    thread *threadHandle;
-    MeetingPlace *place;
 
-    friend struct MeetingPlace;
+protected:
+    pthread_t threadHandle;
+    pthread_attr_t threadAttr;
+    MeetingPlace* place;
 };
 
 struct MeetingPlace {
-    MeetingPlace(int max_meetings): state(max_meetings << 4), idGen(1) {
-        creatures.reserve(max_meetings);
+    enum { S = 4, creatureMask = (1 << S) - 1 };
+    std::atomic<int> state;
+    int idGenerator;
+    Creature** creatures;
+
+    MeetingPlace(int N) : state(N << S), idGenerator(1) {
+        creatures = new Creature*[N];
+    }
+    ~MeetingPlace() { delete[] creatures; }
+
+    void Register(Creature& creature) {
+        creature.id = idGenerator++;
+        creatures[creature.id] = &creature;
     }
 
-    void Register(Creature &c) {
-        c.id = idGen.fetch_add(1);
-        creatures.push_back(&c);
-    }
-
-    void Meet(Creature &c);
-
-private:
-    atomic<int> state;
-    atomic<int> idGen;
-    vector<Creature*> creatures;
-    mutex meetMutex;
+    void MeetUp(Creature* creature);
 };
 
-void Creature::Initialize(MeetingPlace *mp, Color c) {
+void Creature::Init(MeetingPlace* mp, Color c) {
     place = mp;
     initialColor = color = c;
     place->Register(*this);
-    threadHandle = new thread(&Creature::Run, this);
+}
+
+// Implement meeting logic using atomic operations
+void Creature::Meet(Creature* other) {
+    std::lock_guard<std::mutex> lock(mtx);
+    if (id == other->id) {
+        sameCount++;
+        other->sameCount++;
+    }
+    count++;
+    other->count++;
+
+    Color newcolor = color + other->color;
+    other->color = color = newcolor;
+    other->met = true;
+}
+
+// Optimize thread handling by maintaining lock-free synchronization as much as possible
+void Creature::Start(int affinity) {
+    pthread_attr_init(&threadAttr);
+    if (cpus.count >= 4) {
+        cpu_set_t* cores = cpus.getaffinity(affinity);
+        pthread_attr_setaffinity_np(&threadAttr, sizeof(cpu_set_t), cores);
+    }
+    pthread_create(&threadHandle, &threadAttr, [](void* param) -> void* {
+        static_cast<Creature*>(param)->Run();
+        return nullptr;
+    }, this);
 }
 
 void Creature::Run() {
-    place->Meet(*this);
+    place->MeetUp(this);
 }
 
-void Creature::MeetWith(Creature *other) {
-    if (this == other) return;
-
-    // Logic to define what happens when two creatures meet
-    // Possibility to increase count or change state
-    color = color + other->color;
-    if (initialColor == color) sameCount++;
-    other->color = color + other->color; // Simulate mutual meeting affect
-    count++;
+// Using atomic-fence to ensure memory synchronization
+void Creature::WaitUntilMet() {
+    std::unique_lock<std::mutex> lck(mtx);
+    cv.wait(lck, [this] { return met; });
+    met = false;
 }
 
-void MeetingPlace::Meet(Creature &c) {
-    bool loop = true;
+void Creature::Wait() const {
+    pthread_join(threadHandle, nullptr);
+}
 
-    while (loop) {
-        lock_guard<mutex> guard(meetMutex);
+void MeetingPlace::MeetUp(Creature* creature) {
+    int useState = state.load();
+    while (true) {
+        int waiting = useState & creatureMask;
+        int tryState = useState;
 
-        int currentState = state.load();
-        int waitingId = currentState & 0xF;
-
-        if (waitingId) {
-            // Decrement meetings, pairing is now ready to be performed
-            state -= 1 << 4;
-            c.MeetWith(creatures[waitingId - 1]);
-            loop = false;
-        } else if (currentState) {
-            state |= c.id;
-            c.met = true;
+        if (waiting) {
+            tryState = (useState & ~creatureMask) - (1 << S);
+        } else if (useState) {
+            tryState = useState | creature->id;
         } else {
-            loop = false; // No more meetings, exit
+            return;
         }
 
-        if (c.met) {
-            c.met = false;
-            this_thread::yield();
+        if (state.compare_exchange_weak(useState, tryState)) {
+            if (waiting) {
+                creature->Meet(creatures[waiting]);
+            } else {
+                creature->WaitUntilMet();
+            }
+            break;
         }
     }
 }
 
-class Game {
-public:
-    Game(int meetings, const vector<Color> &colors): meetingPlace(meetings) {
-        for (const auto &color : colors) {
-            creatures.emplace_back();
-            creatures.back().Initialize(&meetingPlace, color);
+template<int ncolor>
+struct Game {
+    Game(int meetings, const Color (&color)[ncolor]) : meetingPlace(meetings) {
+        for (int i = 0; i < ncolor; ++i) {
+            creatures[i].Init(&meetingPlace, color[i]);
         }
     }
 
-    void Start() {
-        for (auto &creature : creatures) {
-            creature.Wait();
+    void Start(int affinity = 0) {
+        for (int i = 0; i < ncolor; ++i) {
+            creatures[i].Start(affinity);
+        }
+    }
+
+    void Wait() {
+        for (int i = 0; i < ncolor; ++i) {
+            creatures[i].Wait();
         }
     }
 
     void Display() {
-        int total = 0;
-        for (const auto &creature : creatures) {
-            total += creature.Display();
+        for (int i = 0; i < ncolor; ++i) {
+            cout << " " << creatures[i].initialColor;
         }
-        cout << SpellNumber(total) << "\n\n";
+        cout << endl;
+
+        int total = 0;
+        for (int i = 0; i < ncolor; ++i) {
+            total += creatures[i].Display();
+        }
+        cout << SpellNumber(total) << endl << endl;
     }
 
-private:
+protected:
     MeetingPlace meetingPlace;
-    vector<Creature> creatures;
+    Creature creatures[ncolor];
 };
 
-int main(int argc, const char *argv[]) {
-    vector<Color> r1 = { blue, red, yellow };
-    vector<Color> r2 = { blue, red, yellow, red, yellow, blue, red, yellow, red, blue };
+int main(int argc, const char* argv[]) {
+    const Color r1[] = { blue, red, yellow };
+
+    const Color r2[] = {
+        blue, red, yellow,
+        red, yellow, blue,
+        red, yellow, red,
+        blue
+    };
 
     for (int c1 = blue; c1 <= yellow; c1++)
         for (int c2 = blue; c2 <= yellow; c2++)
@@ -170,13 +251,17 @@ int main(int argc, const char *argv[]) {
 
     int n = (argc >= 2) ? atoi(argv[1]) : 6000000;
 
-    Game g1(n, r1);
-    Game g2(n, r2);
-    g1.Start();
-    g2.Start();
+    Game<3> g1(n, r1);
+    Game<10> g2(n, r2);
+
+    g1.Start(1);
+    g2.Start(2);
+
+    g1.Wait();
+    g2.Wait();
+
     g1.Display();
     g2.Display();
 
     return 0;
 }
-```

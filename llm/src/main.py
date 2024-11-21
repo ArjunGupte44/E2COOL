@@ -7,14 +7,12 @@ from colorLog import *
 from dotenv import load_dotenv
 from datetime import datetime
 from utils import setup_logger
-
-load_dotenv()
-USER_PREFIX = os.getenv('USER_PREFIX')
-
 from regression_test import regression_test
 from new_llm_optimize import llm_optimize, handle_compilation_error
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
 from energy.src.measure_energy import get_evaluator_feedback
+load_dotenv()
+USER_PREFIX = os.getenv('USER_PREFIX')
 
 valid_benchmarks = [
     "binarytrees.gpp-9.c++",
@@ -61,17 +59,14 @@ def master_script(filename):
         # optimization step
         # reoptimize latest working opimized file if logic/compile error
         if reoptimize_lastly_flag == 0:
-            # print_green(f"Optimizing {filename}, iteration {success}")
             logger.info(f"Optimizing {filename}, iteration {success}")
             llm_optimize(filename, success)
         else:
-            # print_green("re-optimizing from latest working optimization")
             logger.info("re-optimizing from latest working optimization")
             llm_optimize(f"{filename.split('.')[0]}.compiled.{'.'.join(filename.split('.')[1:])}", success)
             reoptimize_lastly_flag = 0
         
         # regression test step
-        # print_green(f"Running regression test on optimized_{filename}")
         logger.info(f"Running regression test on optimized_{filename}")
         regression_test_result = regression_test(f"optimized_{filename}")
         i += 1
@@ -82,7 +77,6 @@ def master_script(filename):
 
         # Compilation error in unoptimized file, exit script
         if regression_test_result == -2:
-            # print_red("Error in unoptimized file, exiting script")
             logger.error("Error in unoptimized file, exiting script")
             return
 
@@ -91,22 +85,18 @@ def master_script(filename):
             total_compilation_errors += 1
             occurence_of_compilation_error = i
             if compilation_errors == 3:
-                # print_red("Could not compile optimized file after 3 attempts, will re-optimize from lastest working optimized file")
                 logger.error("Could not compile optimized file after 3 attempts, will re-optimize from lastest working optimized file")
-                # print(f"{filename.split('.')[0]}.compiled.{'.'.join(filename.split('.')[1:])}")
                 logger.info(f"{filename.split('.')[0]}.compiled.{'.'.join(filename.split('.')[1:])}")
                 reoptimize_lastly_flag = 1
                 compilation_errors = 0
                 continue
-            # print_red("Error in optimized file, re-optimizing")
+
             logger.error("Error in optimized file, re-optimizing")
             handle_compilation_error(filename)
             compilation_errors += 1
 
         # Output difference in optimized file, re-prompt
         if regression_test_result == 0:
-            # print_red("Output difference in optimized file, will re-optimize from lastest working optimized file")
-            # print(f"{filename.split('.')[0]}.compiled.{'.'.join(filename.split('.')[1:])}")
             logger.error("Output difference in optimized file, will re-optimize from lastest working optimized file")
             logger.info(f"{filename.split('.')[0]}.compiled.{'.'.join(filename.split('.')[1:])}")
             reoptimize_lastly_flag = 1
@@ -114,23 +104,18 @@ def master_script(filename):
         
         # Success
         if regression_test_result == 1:
-            # print("Regression test successful, getting evaluator feedback")
             logger.info("Regression test successful, getting evaluator feedback")
             get_evaluator_feedback(filename, success)
-            # print_green("Got evaluator feedback")
             logger.info("Got evaluator feedback")
             success += 1
 
             # Copy lastest optimized code for logic error re-optimization
-            # print(f"{USER_PREFIX}/llm/benchmarks_out/{filename.split('.')[0]}/{filename.split('.')[0]}.compiled.{'.'.join(filename.split('.')[1:])}")
-            # print_green("Saving lastest working optimized file")
             logger.info("Saving lastest working optimized file")
             os.makedirs(os.path.dirname(f"{USER_PREFIX}/llm/benchmarks_out/{filename.split('.')[0]}/{filename.split('.')[0]}.compiled.{'.'.join(filename.split('.')[1:])}"), exist_ok=True)
             shutil.copyfile(f"{USER_PREFIX}/llm/benchmarks_out/{filename.split('.')[0]}/optimized_{filename}", f"{USER_PREFIX}/llm/benchmarks_out/{filename.split('.')[0]}/{filename.split('.')[0]}.compiled.{'.'.join(filename.split('.')[1:])}")
             
             # Hard code to run 5 times
             if success == 5:
-                # print_green("Optimized 5 times successfully, exiting script")
                 logger.info("Optimized 5 times successfully, exiting script")
                 break
         
@@ -138,11 +123,9 @@ if __name__ == "__main__":
     
     benchmark = sys.argv[2]
     if benchmark in valid_benchmarks:
-        # print(f"Running benchmark: {benchmark}")
         logger.info(f"Running benchmark: {benchmark}")
         # Call the function or code to execute the benchmark here
     else:
-        # print(f"Error: Invalid benchmark '{benchmark}'.")
         logger.error(f"Error: Invalid benchmark '{benchmark}'.")
         print("Please provide one of the following valid benchmarks:")
         for valid in valid_benchmarks:
@@ -152,9 +135,8 @@ if __name__ == "__main__":
     #run benchmark
     master_script(benchmark)
 
-    # print_green(f"Total compilation errors: {total_compilation_errors}, fixed: {compilation_errors_fixed}")
+
     logger.info(f"Total compilation errors: {total_compilation_errors}, fixed: {compilation_errors_fixed}")
-    # print_green("EEDC Optimization Complete, writing results to file.....")
     logger.info("EEDC Optimization Complete, writing results to file.....")
 
     with open(f"{USER_PREFIX}/energy/c++/benchmark_data.pkl", "rb") as file:
@@ -170,11 +152,8 @@ if __name__ == "__main__":
         # Check if file exists
         if os.path.isfile(file_path):
             os.remove(file_path)
-            # print_green(f"{file_path} has been removed successfully.")
             logger.info(f"{file_path} has been removed successfully.")
         else:
-            # print_red(f"{file_path} does not exist.")
             logger.error(f"{file_path} does not exist.")
     except Exception as e:
-        # print_red(f"An error occurred while trying to remove the file: {e}")
         logger.error(f"An error occurred while trying to remove the file: {e}")

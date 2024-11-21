@@ -1,0 +1,321 @@
+11/15/24 10:38:02 AM : INFO : Running benchmark: binarytrees.gpp-9.c++
+11/15/24 10:38:02 AM : INFO : /home/jimmy/VIP_PTM/E2COOL/llm/benchmarks_out/binarytrees/binarytrees.compiled.gpp-9.c++
+11/15/24 10:38:02 AM : INFO : Optimizing binarytrees.gpp-9.c++, iteration 0
+11/15/24 10:38:31 AM : INFO : HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+11/15/24 10:38:31 AM : INFO : Running regression test on optimized_binarytrees.gpp-9.c++
+11/15/24 10:38:32 AM : ERROR : Output difference in optimized file, will re-optimize from lastest working optimized file
+11/15/24 10:38:32 AM : INFO : binarytrees.compiled.gpp-9.c++
+11/15/24 10:38:32 AM : INFO : re-optimizing from latest working optimization
+11/15/24 10:38:48 AM : INFO : HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+11/15/24 10:38:48 AM : INFO : Running regression test on optimized_binarytrees.gpp-9.c++
+11/15/24 10:38:49 AM : ERROR : Error in optimized file, re-optimizing
+11/15/24 10:39:03 AM : INFO : HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+11/15/24 10:39:03 AM : INFO : Optimizing binarytrees.gpp-9.c++, iteration 0
+11/15/24 10:39:19 AM : INFO : HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+11/15/24 10:39:19 AM : INFO : Running regression test on optimized_binarytrees.gpp-9.c++
+11/15/24 10:39:21 AM : ERROR : Output difference in optimized file, will re-optimize from lastest working optimized file
+11/15/24 10:39:21 AM : INFO : binarytrees.compiled.gpp-9.c++
+11/15/24 10:39:21 AM : INFO : re-optimizing from latest working optimization
+11/15/24 10:39:37 AM : INFO : HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+11/15/24 10:39:37 AM : INFO : Running regression test on optimized_binarytrees.gpp-9.c++
+11/15/24 10:39:39 AM : INFO : Regression test successful, getting evaluator feedback
+11/15/24 10:40:10 AM : INFO : HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+11/15/24 10:40:10 AM : INFO : Got evaluator feedback
+11/15/24 10:40:10 AM : INFO : Saving lastest working optimized file
+11/15/24 10:40:10 AM : INFO : Optimizing binarytrees.gpp-9.c++, iteration 1
+11/15/24 10:40:23 AM : INFO : HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+11/15/24 10:40:23 AM : INFO : Running regression test on optimized_binarytrees.gpp-9.c++
+11/15/24 10:40:25 AM : ERROR : Output difference in optimized file, will re-optimize from lastest working optimized file
+11/15/24 10:40:25 AM : INFO : binarytrees.compiled.gpp-9.c++
+11/15/24 10:40:25 AM : INFO : re-optimizing from latest working optimization
+11/15/24 10:40:40 AM : INFO : HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+11/15/24 10:40:40 AM : INFO : Running regression test on optimized_binarytrees.gpp-9.c++
+11/15/24 10:40:42 AM : INFO : Regression test successful, getting evaluator feedback
+11/15/24 10:41:12 AM : INFO : HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+11/15/24 10:41:12 AM : INFO : Got evaluator feedback
+11/15/24 10:41:12 AM : INFO : Saving lastest working optimized file
+11/15/24 10:41:12 AM : INFO : Optimizing binarytrees.gpp-9.c++, iteration 2
+11/15/24 10:41:41 AM : INFO : HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+11/15/24 10:41:41 AM : INFO : Running regression test on optimized_binarytrees.gpp-9.c++
+11/15/24 10:41:43 AM : INFO : Regression test successful, getting evaluator feedback
+11/15/24 10:42:37 AM : INFO : HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+11/15/24 10:42:37 AM : INFO : Got evaluator feedback
+11/15/24 10:42:37 AM : INFO : Saving lastest working optimized file
+11/15/24 10:42:37 AM : INFO : Optimizing binarytrees.gpp-9.c++, iteration 3
+11/15/24 10:42:57 AM : INFO : HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+11/15/24 10:42:57 AM : INFO : Running regression test on optimized_binarytrees.gpp-9.c++
+11/15/24 10:42:59 AM : ERROR : Output difference in optimized file, will re-optimize from lastest working optimized file
+11/15/24 10:42:59 AM : INFO : binarytrees.compiled.gpp-9.c++
+11/15/24 10:42:59 AM : INFO : re-optimizing from latest working optimization
+11/15/24 10:43:14 AM : INFO : HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+11/15/24 10:43:14 AM : INFO : Running regression test on optimized_binarytrees.gpp-9.c++
+11/15/24 10:43:15 AM : ERROR : Error in optimized file, re-optimizing
+11/15/24 10:43:27 AM : INFO : HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+11/15/24 10:43:27 AM : INFO : Optimizing binarytrees.gpp-9.c++, iteration 3
+11/15/24 10:43:43 AM : INFO : HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+11/15/24 10:43:43 AM : INFO : Running regression test on optimized_binarytrees.gpp-9.c++
+11/15/24 10:43:45 AM : ERROR : Output difference in optimized file, will re-optimize from lastest working optimized file
+11/15/24 10:43:45 AM : INFO : binarytrees.compiled.gpp-9.c++
+11/15/24 10:43:45 AM : INFO : re-optimizing from latest working optimization
+11/15/24 10:44:00 AM : INFO : HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+11/15/24 10:44:00 AM : INFO : Running regression test on optimized_binarytrees.gpp-9.c++
+11/15/24 10:44:00 AM : ERROR : Error in optimized file, re-optimizing
+11/15/24 10:44:13 AM : INFO : HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+11/15/24 10:44:13 AM : INFO : Optimizing binarytrees.gpp-9.c++, iteration 3
+11/15/24 10:44:30 AM : INFO : HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+11/15/24 10:44:30 AM : INFO : Running regression test on optimized_binarytrees.gpp-9.c++
+11/15/24 10:44:31 AM : ERROR : Could not compile optimized file after 3 attempts, will re-optimize from lastest working optimized file
+11/15/24 10:44:31 AM : INFO : binarytrees.compiled.gpp-9.c++
+11/15/24 10:44:31 AM : INFO : re-optimizing from latest working optimization
+11/15/24 10:44:52 AM : INFO : HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+11/15/24 10:44:52 AM : INFO : Running regression test on optimized_binarytrees.gpp-9.c++
+11/15/24 10:44:54 AM : ERROR : Output difference in optimized file, will re-optimize from lastest working optimized file
+11/15/24 10:44:54 AM : INFO : binarytrees.compiled.gpp-9.c++
+11/15/24 10:44:54 AM : INFO : re-optimizing from latest working optimization
+11/15/24 10:45:13 AM : INFO : HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+11/15/24 10:45:13 AM : INFO : Running regression test on optimized_binarytrees.gpp-9.c++
+11/15/24 10:45:15 AM : ERROR : Output difference in optimized file, will re-optimize from lastest working optimized file
+11/15/24 10:45:15 AM : INFO : binarytrees.compiled.gpp-9.c++
+11/15/24 10:45:15 AM : INFO : re-optimizing from latest working optimization
+11/15/24 10:45:32 AM : INFO : HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+11/15/24 10:45:32 AM : INFO : Running regression test on optimized_binarytrees.gpp-9.c++
+11/15/24 10:45:34 AM : ERROR : Output difference in optimized file, will re-optimize from lastest working optimized file
+11/15/24 10:45:34 AM : INFO : binarytrees.compiled.gpp-9.c++
+11/15/24 10:45:34 AM : INFO : re-optimizing from latest working optimization
+11/15/24 10:45:48 AM : INFO : HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+11/15/24 10:45:48 AM : INFO : Running regression test on optimized_binarytrees.gpp-9.c++
+11/15/24 10:45:49 AM : ERROR : Error in optimized file, re-optimizing
+11/15/24 10:46:02 AM : INFO : HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+11/15/24 10:46:02 AM : INFO : Optimizing binarytrees.gpp-9.c++, iteration 3
+11/15/24 10:46:19 AM : INFO : HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+11/15/24 10:46:20 AM : INFO : Running regression test on optimized_binarytrees.gpp-9.c++
+11/15/24 10:46:20 AM : ERROR : Error in optimized file, re-optimizing
+11/15/24 10:46:48 AM : INFO : HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+11/15/24 10:46:48 AM : INFO : Optimizing binarytrees.gpp-9.c++, iteration 3
+11/15/24 10:47:02 AM : INFO : HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+11/15/24 10:47:02 AM : INFO : Running regression test on optimized_binarytrees.gpp-9.c++
+11/15/24 10:47:02 AM : ERROR : Error in optimized file, re-optimizing
+11/15/24 10:47:16 AM : INFO : HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+11/15/24 10:47:17 AM : INFO : Optimizing binarytrees.gpp-9.c++, iteration 3
+11/15/24 10:47:30 AM : INFO : HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+11/15/24 10:47:30 AM : INFO : Running regression test on optimized_binarytrees.gpp-9.c++
+11/15/24 10:47:31 AM : ERROR : Could not compile optimized file after 3 attempts, will re-optimize from lastest working optimized file
+11/15/24 10:47:31 AM : INFO : binarytrees.compiled.gpp-9.c++
+11/15/24 10:47:31 AM : INFO : re-optimizing from latest working optimization
+11/15/24 10:47:44 AM : INFO : HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+11/15/24 10:47:44 AM : INFO : Running regression test on optimized_binarytrees.gpp-9.c++
+11/15/24 10:47:46 AM : ERROR : Output difference in optimized file, will re-optimize from lastest working optimized file
+11/15/24 10:47:46 AM : INFO : binarytrees.compiled.gpp-9.c++
+11/15/24 10:47:46 AM : INFO : re-optimizing from latest working optimization
+11/15/24 10:47:59 AM : INFO : HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+11/15/24 10:47:59 AM : INFO : Running regression test on optimized_binarytrees.gpp-9.c++
+11/15/24 10:48:01 AM : ERROR : Output difference in optimized file, will re-optimize from lastest working optimized file
+11/15/24 10:48:01 AM : INFO : binarytrees.compiled.gpp-9.c++
+11/15/24 10:48:01 AM : INFO : re-optimizing from latest working optimization
+11/15/24 10:48:17 AM : INFO : HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+11/15/24 10:48:17 AM : INFO : Running regression test on optimized_binarytrees.gpp-9.c++
+11/15/24 10:48:17 AM : ERROR : Error in optimized file, re-optimizing
+11/15/24 10:48:29 AM : INFO : HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+11/15/24 10:48:29 AM : INFO : Optimizing binarytrees.gpp-9.c++, iteration 3
+11/15/24 10:48:43 AM : INFO : HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+11/15/24 10:48:43 AM : INFO : Running regression test on optimized_binarytrees.gpp-9.c++
+11/15/24 10:48:46 AM : ERROR : Output difference in optimized file, will re-optimize from lastest working optimized file
+11/15/24 10:48:46 AM : INFO : binarytrees.compiled.gpp-9.c++
+11/15/24 10:48:46 AM : INFO : re-optimizing from latest working optimization
+11/15/24 10:49:00 AM : INFO : HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+11/15/24 10:49:00 AM : INFO : Running regression test on optimized_binarytrees.gpp-9.c++
+11/15/24 10:49:02 AM : ERROR : Output difference in optimized file, will re-optimize from lastest working optimized file
+11/15/24 10:49:02 AM : INFO : binarytrees.compiled.gpp-9.c++
+11/15/24 10:49:02 AM : INFO : re-optimizing from latest working optimization
+11/15/24 10:49:15 AM : INFO : HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+11/15/24 10:49:15 AM : INFO : Running regression test on optimized_binarytrees.gpp-9.c++
+11/15/24 10:49:16 AM : ERROR : Error in optimized file, re-optimizing
+11/15/24 10:49:29 AM : INFO : HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+11/15/24 10:49:29 AM : INFO : Optimizing binarytrees.gpp-9.c++, iteration 3
+11/15/24 10:49:59 AM : INFO : HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+11/15/24 10:49:59 AM : INFO : Running regression test on optimized_binarytrees.gpp-9.c++
+11/15/24 10:50:00 AM : ERROR : Error in optimized file, re-optimizing
+11/15/24 10:50:12 AM : INFO : HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+11/15/24 10:50:12 AM : INFO : Optimizing binarytrees.gpp-9.c++, iteration 3
+11/15/24 10:50:29 AM : INFO : HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+11/15/24 10:50:29 AM : INFO : Running regression test on optimized_binarytrees.gpp-9.c++
+11/15/24 10:50:30 AM : ERROR : Could not compile optimized file after 3 attempts, will re-optimize from lastest working optimized file
+11/15/24 10:50:30 AM : INFO : binarytrees.compiled.gpp-9.c++
+11/15/24 10:50:30 AM : INFO : re-optimizing from latest working optimization
+11/15/24 10:50:47 AM : INFO : HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+11/15/24 10:50:47 AM : INFO : Running regression test on optimized_binarytrees.gpp-9.c++
+11/15/24 10:50:47 AM : ERROR : Error in optimized file, re-optimizing
+11/15/24 10:50:59 AM : INFO : HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+11/15/24 10:50:59 AM : INFO : Optimizing binarytrees.gpp-9.c++, iteration 3
+11/15/24 10:51:24 AM : INFO : HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+11/15/24 10:51:24 AM : INFO : Running regression test on optimized_binarytrees.gpp-9.c++
+11/15/24 10:51:27 AM : ERROR : Output difference in optimized file, will re-optimize from lastest working optimized file
+11/15/24 10:51:27 AM : INFO : binarytrees.compiled.gpp-9.c++
+11/15/24 10:51:27 AM : INFO : re-optimizing from latest working optimization
+11/15/24 10:51:41 AM : INFO : HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+11/15/24 10:51:41 AM : INFO : Running regression test on optimized_binarytrees.gpp-9.c++
+11/15/24 10:51:43 AM : ERROR : Output difference in optimized file, will re-optimize from lastest working optimized file
+11/15/24 10:51:43 AM : INFO : binarytrees.compiled.gpp-9.c++
+11/15/24 10:51:43 AM : INFO : re-optimizing from latest working optimization
+11/15/24 10:51:57 AM : INFO : HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+11/15/24 10:51:57 AM : INFO : Running regression test on optimized_binarytrees.gpp-9.c++
+11/15/24 10:51:57 AM : ERROR : Error in optimized file, re-optimizing
+11/15/24 10:52:16 AM : INFO : HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+11/15/24 10:52:16 AM : INFO : Optimizing binarytrees.gpp-9.c++, iteration 3
+11/15/24 10:52:28 AM : INFO : HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+11/15/24 10:52:28 AM : INFO : Running regression test on optimized_binarytrees.gpp-9.c++
+11/15/24 10:52:28 AM : ERROR : Error in optimized file, re-optimizing
+11/15/24 10:52:42 AM : INFO : HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+11/15/24 10:52:42 AM : INFO : Optimizing binarytrees.gpp-9.c++, iteration 3
+11/15/24 10:52:55 AM : INFO : HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+11/15/24 10:52:55 AM : INFO : Running regression test on optimized_binarytrees.gpp-9.c++
+11/15/24 10:52:56 AM : ERROR : Could not compile optimized file after 3 attempts, will re-optimize from lastest working optimized file
+11/15/24 10:52:56 AM : INFO : binarytrees.compiled.gpp-9.c++
+11/15/24 10:52:56 AM : INFO : re-optimizing from latest working optimization
+11/15/24 10:53:11 AM : INFO : HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+11/15/24 10:53:11 AM : INFO : Running regression test on optimized_binarytrees.gpp-9.c++
+11/15/24 10:53:13 AM : INFO : Regression test successful, getting evaluator feedback
+11/15/24 10:53:36 AM : INFO : HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+11/15/24 10:53:36 AM : INFO : Got evaluator feedback
+11/15/24 10:53:36 AM : INFO : Saving lastest working optimized file
+11/15/24 10:53:36 AM : INFO : Optimizing binarytrees.gpp-9.c++, iteration 4
+11/15/24 10:53:57 AM : INFO : HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+11/15/24 10:53:57 AM : INFO : Running regression test on optimized_binarytrees.gpp-9.c++
+11/15/24 10:53:59 AM : ERROR : Output difference in optimized file, will re-optimize from lastest working optimized file
+11/15/24 10:53:59 AM : INFO : binarytrees.compiled.gpp-9.c++
+11/15/24 10:53:59 AM : INFO : re-optimizing from latest working optimization
+11/15/24 10:54:14 AM : INFO : HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+11/15/24 10:54:14 AM : INFO : Running regression test on optimized_binarytrees.gpp-9.c++
+11/15/24 10:54:16 AM : ERROR : Output difference in optimized file, will re-optimize from lastest working optimized file
+11/15/24 10:54:16 AM : INFO : binarytrees.compiled.gpp-9.c++
+11/15/24 10:54:16 AM : INFO : re-optimizing from latest working optimization
+11/15/24 10:54:29 AM : INFO : HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+11/15/24 10:54:29 AM : INFO : Running regression test on optimized_binarytrees.gpp-9.c++
+11/15/24 10:54:29 AM : ERROR : Error in optimized file, re-optimizing
+11/15/24 10:54:56 AM : INFO : HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+11/15/24 10:54:56 AM : INFO : Optimizing binarytrees.gpp-9.c++, iteration 4
+11/15/24 10:55:13 AM : INFO : HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+11/15/24 10:55:13 AM : INFO : Running regression test on optimized_binarytrees.gpp-9.c++
+11/15/24 10:55:15 AM : ERROR : Output difference in optimized file, will re-optimize from lastest working optimized file
+11/15/24 10:55:15 AM : INFO : binarytrees.compiled.gpp-9.c++
+11/15/24 10:55:15 AM : INFO : re-optimizing from latest working optimization
+11/15/24 10:55:30 AM : INFO : HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+11/15/24 10:55:30 AM : INFO : Running regression test on optimized_binarytrees.gpp-9.c++
+11/15/24 10:55:32 AM : ERROR : Output difference in optimized file, will re-optimize from lastest working optimized file
+11/15/24 10:55:32 AM : INFO : binarytrees.compiled.gpp-9.c++
+11/15/24 10:55:32 AM : INFO : re-optimizing from latest working optimization
+11/15/24 10:55:51 AM : INFO : HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+11/15/24 10:55:51 AM : INFO : Running regression test on optimized_binarytrees.gpp-9.c++
+11/15/24 10:55:53 AM : ERROR : Output difference in optimized file, will re-optimize from lastest working optimized file
+11/15/24 10:55:53 AM : INFO : binarytrees.compiled.gpp-9.c++
+11/15/24 10:55:53 AM : INFO : re-optimizing from latest working optimization
+11/15/24 10:56:13 AM : INFO : HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+11/15/24 10:56:13 AM : INFO : Running regression test on optimized_binarytrees.gpp-9.c++
+11/15/24 10:56:15 AM : ERROR : Output difference in optimized file, will re-optimize from lastest working optimized file
+11/15/24 10:56:15 AM : INFO : binarytrees.compiled.gpp-9.c++
+11/15/24 10:56:15 AM : INFO : re-optimizing from latest working optimization
+11/15/24 10:56:28 AM : INFO : HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+11/15/24 10:56:28 AM : INFO : Running regression test on optimized_binarytrees.gpp-9.c++
+11/15/24 10:56:31 AM : ERROR : Output difference in optimized file, will re-optimize from lastest working optimized file
+11/15/24 10:56:31 AM : INFO : binarytrees.compiled.gpp-9.c++
+11/15/24 10:56:31 AM : INFO : re-optimizing from latest working optimization
+11/15/24 10:56:44 AM : INFO : HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+11/15/24 10:56:44 AM : INFO : Running regression test on optimized_binarytrees.gpp-9.c++
+11/15/24 10:56:46 AM : ERROR : Output difference in optimized file, will re-optimize from lastest working optimized file
+11/15/24 10:56:46 AM : INFO : binarytrees.compiled.gpp-9.c++
+11/15/24 10:56:46 AM : INFO : re-optimizing from latest working optimization
+11/15/24 10:57:10 AM : INFO : HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+11/15/24 10:57:10 AM : INFO : Running regression test on optimized_binarytrees.gpp-9.c++
+11/15/24 10:57:12 AM : ERROR : Output difference in optimized file, will re-optimize from lastest working optimized file
+11/15/24 10:57:12 AM : INFO : binarytrees.compiled.gpp-9.c++
+11/15/24 10:57:12 AM : INFO : re-optimizing from latest working optimization
+11/15/24 10:57:28 AM : INFO : HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+11/15/24 10:57:28 AM : INFO : Running regression test on optimized_binarytrees.gpp-9.c++
+11/15/24 10:57:30 AM : ERROR : Output difference in optimized file, will re-optimize from lastest working optimized file
+11/15/24 10:57:30 AM : INFO : binarytrees.compiled.gpp-9.c++
+11/15/24 10:57:30 AM : INFO : re-optimizing from latest working optimization
+11/15/24 10:57:48 AM : INFO : HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+11/15/24 10:57:48 AM : INFO : Running regression test on optimized_binarytrees.gpp-9.c++
+11/15/24 10:57:50 AM : ERROR : Output difference in optimized file, will re-optimize from lastest working optimized file
+11/15/24 10:57:50 AM : INFO : binarytrees.compiled.gpp-9.c++
+11/15/24 10:57:50 AM : INFO : re-optimizing from latest working optimization
+11/15/24 10:58:02 AM : INFO : HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+11/15/24 10:58:02 AM : INFO : Running regression test on optimized_binarytrees.gpp-9.c++
+11/15/24 10:58:04 AM : ERROR : Output difference in optimized file, will re-optimize from lastest working optimized file
+11/15/24 10:58:04 AM : INFO : binarytrees.compiled.gpp-9.c++
+11/15/24 10:58:04 AM : INFO : re-optimizing from latest working optimization
+11/15/24 10:58:21 AM : INFO : HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+11/15/24 10:58:21 AM : INFO : Running regression test on optimized_binarytrees.gpp-9.c++
+11/15/24 10:58:23 AM : ERROR : Output difference in optimized file, will re-optimize from lastest working optimized file
+11/15/24 10:58:23 AM : INFO : binarytrees.compiled.gpp-9.c++
+11/15/24 10:58:23 AM : INFO : re-optimizing from latest working optimization
+11/15/24 10:58:36 AM : INFO : HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+11/15/24 10:58:36 AM : INFO : Running regression test on optimized_binarytrees.gpp-9.c++
+11/15/24 10:58:38 AM : ERROR : Output difference in optimized file, will re-optimize from lastest working optimized file
+11/15/24 10:58:38 AM : INFO : binarytrees.compiled.gpp-9.c++
+11/15/24 10:58:38 AM : INFO : re-optimizing from latest working optimization
+11/15/24 10:58:50 AM : INFO : HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+11/15/24 10:58:50 AM : INFO : Running regression test on optimized_binarytrees.gpp-9.c++
+11/15/24 10:58:52 AM : ERROR : Output difference in optimized file, will re-optimize from lastest working optimized file
+11/15/24 10:58:52 AM : INFO : binarytrees.compiled.gpp-9.c++
+11/15/24 10:58:52 AM : INFO : re-optimizing from latest working optimization
+11/15/24 10:59:03 AM : INFO : HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+11/15/24 10:59:03 AM : INFO : Running regression test on optimized_binarytrees.gpp-9.c++
+11/15/24 10:59:06 AM : ERROR : Output difference in optimized file, will re-optimize from lastest working optimized file
+11/15/24 10:59:06 AM : INFO : binarytrees.compiled.gpp-9.c++
+11/15/24 10:59:06 AM : INFO : re-optimizing from latest working optimization
+11/15/24 10:59:20 AM : INFO : HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+11/15/24 10:59:20 AM : INFO : Running regression test on optimized_binarytrees.gpp-9.c++
+11/15/24 10:59:22 AM : ERROR : Output difference in optimized file, will re-optimize from lastest working optimized file
+11/15/24 10:59:22 AM : INFO : binarytrees.compiled.gpp-9.c++
+11/15/24 10:59:22 AM : INFO : re-optimizing from latest working optimization
+11/15/24 10:59:36 AM : INFO : HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+11/15/24 10:59:36 AM : INFO : Running regression test on optimized_binarytrees.gpp-9.c++
+11/15/24 10:59:38 AM : ERROR : Output difference in optimized file, will re-optimize from lastest working optimized file
+11/15/24 10:59:38 AM : INFO : binarytrees.compiled.gpp-9.c++
+11/15/24 10:59:38 AM : INFO : re-optimizing from latest working optimization
+11/15/24 10:59:49 AM : INFO : HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+11/15/24 10:59:49 AM : INFO : Running regression test on optimized_binarytrees.gpp-9.c++
+11/15/24 10:59:51 AM : ERROR : Output difference in optimized file, will re-optimize from lastest working optimized file
+11/15/24 10:59:51 AM : INFO : binarytrees.compiled.gpp-9.c++
+11/15/24 10:59:51 AM : INFO : re-optimizing from latest working optimization
+11/15/24 11:00:12 AM : INFO : HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+11/15/24 11:00:12 AM : INFO : Running regression test on optimized_binarytrees.gpp-9.c++
+11/15/24 11:00:14 AM : ERROR : Output difference in optimized file, will re-optimize from lastest working optimized file
+11/15/24 11:00:14 AM : INFO : binarytrees.compiled.gpp-9.c++
+11/15/24 11:00:14 AM : INFO : re-optimizing from latest working optimization
+11/15/24 11:00:31 AM : INFO : HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+11/15/24 11:00:31 AM : INFO : Running regression test on optimized_binarytrees.gpp-9.c++
+11/15/24 11:00:33 AM : ERROR : Output difference in optimized file, will re-optimize from lastest working optimized file
+11/15/24 11:00:33 AM : INFO : binarytrees.compiled.gpp-9.c++
+11/15/24 11:00:33 AM : INFO : re-optimizing from latest working optimization
+11/15/24 11:01:09 AM : INFO : HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+11/15/24 11:01:09 AM : INFO : Running regression test on optimized_binarytrees.gpp-9.c++
+11/15/24 11:01:12 AM : ERROR : Output difference in optimized file, will re-optimize from lastest working optimized file
+11/15/24 11:01:12 AM : INFO : binarytrees.compiled.gpp-9.c++
+11/15/24 11:01:12 AM : INFO : re-optimizing from latest working optimization
+11/15/24 11:01:45 AM : INFO : HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+11/15/24 11:01:45 AM : INFO : Running regression test on optimized_binarytrees.gpp-9.c++
+11/15/24 11:01:47 AM : ERROR : Output difference in optimized file, will re-optimize from lastest working optimized file
+11/15/24 11:01:47 AM : INFO : binarytrees.compiled.gpp-9.c++
+11/15/24 11:01:47 AM : INFO : re-optimizing from latest working optimization
+11/15/24 11:02:13 AM : INFO : HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+11/15/24 11:02:13 AM : INFO : Running regression test on optimized_binarytrees.gpp-9.c++
+11/15/24 11:02:15 AM : ERROR : Output difference in optimized file, will re-optimize from lastest working optimized file
+11/15/24 11:02:15 AM : INFO : binarytrees.compiled.gpp-9.c++
+11/15/24 11:02:15 AM : INFO : re-optimizing from latest working optimization
+11/15/24 11:02:32 AM : INFO : HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+11/15/24 11:02:32 AM : INFO : Running regression test on optimized_binarytrees.gpp-9.c++
+11/15/24 11:02:34 AM : ERROR : Output difference in optimized file, will re-optimize from lastest working optimized file
+11/15/24 11:02:34 AM : INFO : binarytrees.compiled.gpp-9.c++
+11/15/24 11:02:34 AM : INFO : re-optimizing from latest working optimization
+11/15/24 11:02:52 AM : INFO : HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+11/15/24 11:02:52 AM : INFO : Running regression test on optimized_binarytrees.gpp-9.c++
+11/15/24 11:02:54 AM : ERROR : Output difference in optimized file, will re-optimize from lastest working optimized file
+11/15/24 11:02:54 AM : INFO : binarytrees.compiled.gpp-9.c++
+11/15/24 11:02:54 AM : INFO : re-optimizing from latest working optimization
+11/15/24 11:03:16 AM : INFO : HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+11/15/24 11:03:16 AM : INFO : Running regression test on optimized_binarytrees.gpp-9.c++
+11/15/24 11:03:19 AM : ERROR : Output difference in optimized file, will re-optimize from lastest working optimized file
+11/15/24 11:03:19 AM : INFO : binarytrees.compiled.gpp-9.c++
+11/15/24 11:03:19 AM : INFO : re-optimizing from latest working optimization

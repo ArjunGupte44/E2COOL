@@ -1,0 +1,9 @@
+11/12/24 02:43:57 PM : INFO : Running benchmark: binarytrees.gpp-9.c++
+11/12/24 02:43:57 PM : INFO : /home/jimmy/VIP_PTM/E2COOL/llm/benchmarks_out/binarytrees/binarytrees.compiled.gpp-9.c++
+11/12/24 02:43:57 PM : INFO : Optimizing binarytrees.gpp-9.c++, iteration 0
+11/12/24 02:45:13 PM : INFO : HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+11/12/24 02:45:14 PM : INFO : Running regression test on optimized_binarytrees.gpp-9.c++
+11/12/24 02:45:14 PM : ERROR : Error in unoptimized file, exiting script
+11/12/24 02:45:14 PM : INFO : Total compilation errors: 0, fixed: 0
+11/12/24 02:45:14 PM : INFO : EEDC Optimization Complete, writing results to file.....
+11/12/24 02:45:14 PM : ERROR : /home/jimmy/VIP_PTM/E2COOL/energy/src/evaluator_feedback.txt does not exist.
