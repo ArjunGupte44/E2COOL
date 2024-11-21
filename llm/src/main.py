@@ -1,18 +1,27 @@
-import os
-import sys
-import json
-import shutil
-import pickle
 from colorLog import *
-from dotenv import load_dotenv
 from datetime import datetime
+from dotenv import load_dotenv
+import json
+import ollama
+from ollama import Client
+import os
+import pickle
+import shutil
+import subprocess
+import sys
 from utils import setup_logger
+
+
+load_dotenv()
+USER_PREFIX = os.getenv('USER_PREFIX')
+
 from regression_test import regression_test
 from new_llm_optimize import llm_optimize, handle_compilation_error
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
 from energy.src.measure_energy import get_evaluator_feedback
-load_dotenv()
-USER_PREFIX = os.getenv('USER_PREFIX')
+
+
+
 
 valid_benchmarks = [
     "binarytrees.gpp-9.c++",
@@ -40,7 +49,7 @@ if not os.path.exists(log_dir):
 log_file_path = os.path.join(log_dir, attach_datetime('run') + '.log')
 logger = setup_logger(log_file_path)
 
-def master_script(filename):
+def master_script(filename, client, model_name):
 
     global total_compilation_errors, compilation_errors_fixed
 
@@ -60,10 +69,10 @@ def master_script(filename):
         # reoptimize latest working opimized file if logic/compile error
         if reoptimize_lastly_flag == 0:
             logger.info(f"Optimizing {filename}, iteration {success}")
-            llm_optimize(filename, success)
+            llm_optimize(client, model_name, filename, success)
         else:
             logger.info("re-optimizing from latest working optimization")
-            llm_optimize(f"{filename.split('.')[0]}.compiled.{'.'.join(filename.split('.')[1:])}", success)
+            llm_optimize(client, model_name, f"{filename.split('.')[0]}.compiled.{'.'.join(filename.split('.')[1:])}", success)
             reoptimize_lastly_flag = 0
         
         # regression test step
@@ -92,7 +101,7 @@ def master_script(filename):
                 continue
 
             logger.error("Error in optimized file, re-optimizing")
-            handle_compilation_error(filename)
+            handle_compilation_error(client, model_name, filename)
             compilation_errors += 1
 
         # Output difference in optimized file, re-prompt
@@ -105,7 +114,8 @@ def master_script(filename):
         # Success
         if regression_test_result == 1:
             logger.info("Regression test successful, getting evaluator feedback")
-            get_evaluator_feedback(filename, success)
+            get_evaluator_feedback(client, model_name, filename, success)
+            # print_green("Got evaluator feedback")
             logger.info("Got evaluator feedback")
             success += 1
 
@@ -121,6 +131,7 @@ def master_script(filename):
         
 if __name__ == "__main__":
     
+    #Check if requested benchmark is valid
     benchmark = sys.argv[2]
     if benchmark in valid_benchmarks:
         logger.info(f"Running benchmark: {benchmark}")
@@ -131,11 +142,25 @@ if __name__ == "__main__":
         for valid in valid_benchmarks:
             print(f" - {valid}")
         sys.exit(1)
-
+    
+    #Check if requested LLM is valid
+    model_name = sys.argv[3]
+    if model_name == "openai":
+        client = model_name
+    else:
+        try:
+            subprocess.run(["ollama", "pull", model_name], check=True)
+        except Exception as e:
+            logger.error(f"Error: Invalid LLM requested: {model_name}")
+            print("Please provide the name of an LLM suppported by Ollama")
+            sys.exit(1)
+        else:
+            client = Client(host="http://localhost:11434")
+            
     #run benchmark
-    master_script(benchmark)
+    master_script(benchmark, client, model_name)
 
-
+    # print_green(f"Total compilation errors: {total_compilation_errors}, fixed: {compilation_errors_fixed}")
     logger.info(f"Total compilation errors: {total_compilation_errors}, fixed: {compilation_errors_fixed}")
     logger.info("EEDC Optimization Complete, writing results to file.....")
 
