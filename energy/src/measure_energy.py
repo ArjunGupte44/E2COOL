@@ -93,7 +93,7 @@ def print_benchmark_info(benchmark_info):
     print("Average Runtime:", benchmark_info["current"]["avg_runtime"])
     print("\n")
 
-def get_evaluator_feedback(filename, optim_iter):
+def get_evaluator_feedback(client, model_name, filename, optim_iter):
 
     language = filename.split(".")[-1]
     # print(f"language: {language}")
@@ -136,7 +136,7 @@ def get_evaluator_feedback(filename, optim_iter):
 
     #run evaluator
     print("get_evaluator_feedback: Getting evaluator feedback ....")
-    evaluator_feedback = evaluator_llm(benchmark_info)
+    evaluator_feedback = evaluator_llm(client, model_name, benchmark_info)
     # print(evaluator_feedback)
     
     return benchmark_info
@@ -144,4 +144,4 @@ def get_evaluator_feedback(filename, optim_iter):
 if __name__ == "__main__":
     for i in range(0,4):
         print(f"Iteration {i}")
-        get_evaluator_feedback("binarytrees.gpp-9.c++", i)
+        get_evaluator_feedback(None, None, "binarytrees.gpp-9.c++", i)

@@ -1,7 +1,10 @@
-from pydantic import BaseModel
-from openai import OpenAI
 from dotenv import load_dotenv
+from openai import OpenAI
 import os
+from pydantic import BaseModel
+
+
+
 load_dotenv()
 
 
@@ -104,18 +107,18 @@ prompt = """You are tasked with optimizing the following C++ code for energy eff
                 ```
 """
 
-def llm_optimize(filename, optim_iter):
+def llm_optimize(client, model_name, filename, optim_iter):
 
     # get original code
     source_path = f"{USER_PREFIX}/llm/benchmarks_out/{filename.split('.')[0]}/{filename}"
 
     # get optimized file if is not first iteration
     if optim_iter != 0:
-        source_path = f"{USER_PREFIX}/E2COOL/llm/benchmarks_out/{filename.split('.')[0]}/optimized_{filename}"
+        source_path = f"{USER_PREFIX}/llm/benchmarks_out/{filename.split('.')[0]}/optimized_{filename}"
 
     # get lastly compiled code
     if filename.split('.')[1] == "compiled":
-        source_path = f"{USER_PREFIX}/E2COOL/llm/benchmarks_out/{filename.split('.')[0]}/{filename}"
+        source_path = f"{USER_PREFIX}/llm/benchmarks_out/{filename.split('.')[0]}/{filename}"
         filename = filename.split('.')[0] + "." + ('.'.join(filename.split('.')[2:]))
     
     with open(source_path, "r") as file:
@@ -152,27 +155,36 @@ def llm_optimize(filename, optim_iter):
 
     with open(f"{USER_PREFIX}/llm/src/output_logs/optimize_prompt_log.txt", "w") as f:
         f.write(optimize_prompt)
-
-    client = OpenAI(api_key=openai_key)
-
+    
+    
     print(f"llm_optimize: Generator LLM Optimizing ....")
-    completion = client.beta.chat.completions.parse(
-        model="gpt-4o-2024-08-06",
-        messages=[
-            {"role": "system", "content": "You are a helpful assistant. Think through the code optimizations strategies possible step by step"},
-            {
-                "role": "user",
-                "content": optimize_prompt
-            }
-        ],
-        response_format=OptimizationReasoning
-    )
+    messages = [
+                {
+                    "role": "system", 
+                    "content": "You are a helpful assistant. Think through the code optimizations strategies possible step by step"
+                },
+                {
+                    "role": "user",
+                    "content": optimize_prompt
+                }
+                ]
+    if client == "openai":
+        client = OpenAI(api_key=openai_key)
+        completion = client.beta.chat.completions.parse(
+            model="gpt-4o-2024-08-06",
+            messages=messages,
+            response_format=OptimizationReasoning
+        )
+        final_code = completion.choices[0].message.parsed.final_code
+    else:
+        output = client.chat(model=model_name, messages=messages)
+        final_code = output["message"]["content"]
 
-    if completion.choices[0].message.parsed.final_code == "":
+
+    if final_code == "":
         print("Error in llm completion")
         return
     
-    final_code = completion.choices[0].message.parsed.final_code
     
     print(f"llm_optimize: : writing optimized code to llm/benchmarks_out/{filename.split('.')[0]}/optimized_{filename}")
     destination_path = f"{USER_PREFIX}/llm/benchmarks_out/{filename.split('.')[0]}"
@@ -182,7 +194,7 @@ def llm_optimize(filename, optim_iter):
     # Success code
     return 0
 
-def handle_compilation_error(filename):
+def handle_compilation_error(client, model_name, filename):
     with open(f"{USER_PREFIX}/llm/benchmarks_out/{filename.split('.')[0]}/optimized_{filename}", "r") as file:
         optimized_code = file.read()
 
@@ -208,27 +220,34 @@ def handle_compilation_error(filename):
         
 
         print("handle_compilation_error: promting for re-optimization")
-        client = OpenAI(api_key=openai_key)
-        completion = client.beta.chat.completions.parse(
-            model="gpt-4o-2024-08-06",
-            messages=[
-                {"role": "system", "content": "You are a helpful assistant. Think through the code optimizations strategies possible step by step"},
-                {
-                    "role": "user",
-                    "content": compilation_error_prompt
-                }
-            ],
-            response_format=ErrorReasoning
-        )
+        messages = [
+                    {
+                        "role": "system",
+                        "content": "You are a helpful assistant. Think through the code optimizations strategies possible step by step"},
+                    {
+                        "role": "user",
+                        "content": compilation_error_prompt
+                    }
+                    ]
+        if client == "openai":
+            client = OpenAI(api_key=openai_key)
+            completion = client.beta.chat.completions.parse(
+                model="gpt-4o-2024-08-06",
+                messages=messages,
+                response_format=ErrorReasoning
+            )
+            final_code = completion.choices[0].message.parsed.final_code
+        else:
+            output = client.chat(model=model_name, messages=messages)
+            final_code = output["message"]["content"]
 
-        final_code = completion.choices[0].message.parsed.final_code
 
         print(f"handle_compilation_error: writing re-optimized code to optimized_{filename}")
         destination_path = f"{USER_PREFIX}/llm/benchmarks_out/{filename.split('.')[0]}"
         with open(destination_path+"/optimized_"+filename, "w") as file:
             file.write(final_code)
 
-def handle_logic_error(filename):
+def handle_logic_error(client, model_name, filename):
     with open(f"{USER_PREFIX}/llm/benchmarks_out/{filename.split('.')[0]}/optimized_{filename}", "r") as file:
         optimized_code = file.read()
 
@@ -243,20 +262,26 @@ def handle_logic_error(filename):
     #just prompting it to give output difference everytime
     logic_error_prompt = f"""You were tasked with the task outlined in the following prompt: {prompt}. You returned the following optimized code: {optimized_code}. However, the code failed to produce the same outputs as the original source code. Here are the output differences : {output_differences}. Analyze the source code and the optimized code and explicitly identify the potential reasons that caused the logic error. Then, consider if there's a need to use a different optimization strategy to match the outputs or if there are code changes which can fix this implementation strategy. Finally, update the code accordingly and ensure it will match the source code's outputs for any input. Ensure that the optimized code is both efficient and error-free and return it. """
     
-    client = OpenAI(api_key=openai_key)
-    completion = client.beta.chat.completions.parse(
-        model="gpt-4o-2024-08-06",
-        messages=[
-            {"role": "system", "content": "You are a helpful assistant. Think through the code optimizations strategies possible step by step"},
-            {
-                "role": "user",
-                "content": logic_error_prompt
-            }
-        ],
-        response_format=ErrorReasoning
-    )
-
-    final_code = completion.choices[0].message.parsed.final_code
+    messages = [
+                {
+                    "role": "system",
+                    "content": "You are a helpful assistant. Think through the code optimizations strategies possible step by step"},
+                {
+                    "role": "user",
+                    "content": logic_error_prompt
+                }
+                ]
+    if client == "openai":
+        client = OpenAI(api_key=openai_key)
+        completion = client.beta.chat.completions.parse(
+            model="gpt-4o-2024-08-06",
+            messages=messages,
+            response_format=ErrorReasoning
+        )
+        final_code = completion.choices[0].message.parsed.final_code
+    else:
+        output = client.chat(model=model_name, messages=messages)
+        final_code = output["message"]["content"]
 
 
     destination_path = f"{USER_PREFIX}/llm/benchmarks_out/{filename.split('.')[0]}"

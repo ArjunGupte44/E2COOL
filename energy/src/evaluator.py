@@ -1,13 +1,13 @@
-from pydantic import BaseModel
-from openai import OpenAI
-import json
-import os
 from dotenv import load_dotenv
+import json
+from openai import OpenAI
+import os
+from pydantic import BaseModel
 
 load_dotenv()
 openai_key = os.getenv('API_KEY')
 
-def evaluator_llm(benchmark_info):
+def evaluator_llm(client, model_name, benchmark_info):
 
     #extract original
     original_source_code = benchmark_info["original"]["source_code"]
@@ -74,19 +74,28 @@ def evaluator_llm(benchmark_info):
     Please respond in natural language (English) with actionable suggestions for improving the code's performance in terms of energy usage. Provide only the best code with the lowest energy usage.
     """
 
+    messages = [
+                {
+                    "role": "system",
+                    "content": "You are a helpful assistant. Think through the code optimizations strategies possible step by step"
+                },
+                {
+                    "role": "user",
+                    "content": prompt
+                }
+                ]
+    if client == "openai":
+        client = OpenAI(api_key=openai_key)
+        
+        response = client.beta.chat.completions.parse(
+            model="gpt-4o-2024-08-06",
+            messages=messages
+        )
+        evaluator_feedback = response.choices[0].message.content
+    else:
+        output = client.chat(model=model_name, messages=messages)
+        evaluator_feedback = output["message"]["content"]
 
-    client = OpenAI(api_key=openai_key)
-    
-    response = client.beta.chat.completions.parse(
-        model="gpt-4o-2024-08-06",
-        messages=[
-            {"role": "system", "content": "You are a helpful assistant. Think through the code optimizations strategies possible step by step"},
-            {"role": "user", "content": prompt}
-        ]
-    )
-    
-    # Extract the answer from the response
-    evaluator_feedback = response.choices[0].message.content
 
     #write to file
     current_dir = os.path.dirname(__file__)
