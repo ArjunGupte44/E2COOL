@@ -1,5 +1,0 @@
-11/12/24 04:22:44 PM : INFO : Running benchmark: binarytrees.gpp-9.c++
-11/12/24 04:22:44 PM : INFO : /home/jimmy/VIP_PTM/E2COOL/llm/benchmarks_out/binarytrees/binarytrees.compiled.gpp-9.c++
-11/12/24 04:22:44 PM : INFO : Optimizing binarytrees.gpp-9.c++, iteration 0
-11/12/24 04:22:58 PM : INFO : HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
-11/12/24 04:22:58 PM : INFO : Running regression test on optimized_binarytrees.gpp-9.c++
