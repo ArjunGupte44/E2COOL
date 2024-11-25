@@ -60,12 +60,13 @@ To set up the pipeline for energy-efficient code optimization, follow these step
 ## Running the pipeline
 5. **Run the main script in the home directory (/E2COOL)**
     ```bash
-    make run (benchmark name)
+    make run (benchmark name) (model name)
     ```
-    For example, to run the Binary Trees benchmark,
+    For example, to run the Binary Trees benchmark using `llama3.1:latest`,
    ```bash
-   make run binarytrees.gpp-9.c++
+   make run binarytrees.gpp-9.c++ llama3.1:latest
    ```
+   Available models: use `openai` as model name for `gpt-4o-2024-08-06`. Open-souce LLMs are supported via ollama.
     
 
 ## Analysis and evaluation
