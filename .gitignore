@@ -1,3 +1,4 @@
 llm/src/__pycache__/
 energy/src/__pycache__/
 .env
+logs/
